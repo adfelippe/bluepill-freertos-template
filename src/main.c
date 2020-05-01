@@ -32,10 +32,10 @@ void blinkLedTask(void *pvParameters)
     while(1) {
         //Set PB0 high
         GPIOB->BSRR = GPIO_BSRR_BS0;
-        for (uint32_t i = 0; i != 0x7ffff; i++) { }
+        for (uint32_t i = 0; i != 0xffff; i++) { }
         //Reset PB0 low
         GPIOB->BSRR = GPIO_BSRR_BR0;
-        for (uint32_t i = 0; i != 0x7ffff; i++) { }
+        for (uint32_t i = 0; i != 0xffff; i++) { }
     }
 
 }

@@ -1,0 +1,4 @@
+# Objects gitignore file
+
+*.o
+*.lst

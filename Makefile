@@ -26,9 +26,9 @@ ASM = 	$(wildcard $(SRCDIR)/*.s) $(wildcard $(COMDIR)/*.s) $(wildcard $(FREERTOS
 ASM +=  $(wildcard $(PORTABLE)/*.s) $(wildcard $(MEMMANG)/*.s)
 
 # Include directories
-INCLUDE  = 	-I$(INCDIR) 	\
-		-Icmsis 	\
-		-IFreeRTOS/Source/include \
+INCLUDE  = 	-I$(INCDIR) 			\
+		-Icmsis 					\
+		-IFreeRTOS/Source/include 	\
 		-IFreeRTOS/Source/portable/GCC/ARM_CM3
 
 # Linker
@@ -43,6 +43,7 @@ ASFLAGS += -mcpu=$(CPU)
 
 # Flashing
 STLINK = st-flash --reset write
+STLINK_WINDOWS = ST-LINK_CLI.exe -c SWD SWCLK=4000000 UR LPM Hrst
 
 # Tools
 CC = arm-none-eabi-gcc
@@ -61,12 +62,16 @@ OBJ := $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
 OBJ += $(addprefix $(OBJDIR)/,$(notdir $(ASM:.s=.o)))
 
 
-all:: $(BINDIR)/$(PROJECT).bin
+all:: $(BINDIR)/$(PROJECT).bin $(BINDIR)/$(PROJECT).hex
 
-Build: $(BINDIR)/$(PROJECT).bin
+Build: $(BINDIR)/$(PROJECT).bin $(BINDIR)/$(PROJECT).hex
 
-flash:
+flash_linux:
 	$(STLINK) $(BINDIR)/$(PROJECT).bin 0x8000000
+
+flash_windows:
+	$(STLINK_WINDOWS) -ME -P $(BINDIR)/$(PROJECT).bin 0x08000000 -V -HardRst
+	$(STLINK_WINDOWS)
 
 $(BINDIR)/$(PROJECT).hex: $(BINDIR)/$(PROJECT).elf
 	$(OBJCOPY) -R .stack -O ihex $(BINDIR)/$(PROJECT).elf $(BINDIR)/$(PROJECT).hex
@@ -86,8 +91,12 @@ macros:
 cleanBuild: clean
 
 clean:
-	$(RM) $(BINDIR)
-	$(RM) $(OBJDIR)
+	$(RM) $(BINDIR)/*.hex
+	$(RM) $(BINDIR)/*.bin
+	$(RM) $(BINDIR)/*.elf
+	$(RM) $(BINDIR)/*.lst
+	$(RM) $(OBJDIR)/*.o
+	$(RM) $(OBJDIR)/*.lst
 
 # Compilation
 $(OBJDIR)/%.o: $(SRCDIR)/%.c

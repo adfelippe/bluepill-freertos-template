@@ -1,0 +1,6 @@
+# Binary gitignore file
+
+*.bin
+*.hex
+*.elf
+*.lst

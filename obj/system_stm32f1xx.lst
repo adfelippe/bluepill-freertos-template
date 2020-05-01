@@ -1,0 +1,1748 @@
+ARM GAS  /tmp/cccYustO.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"system_stm32f1xx.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	SystemCoreClock
+  16              		.data
+  17              		.align	2
+  18              		.type	SystemCoreClock, %object
+  19              		.size	SystemCoreClock, 4
+  20              	SystemCoreClock:
+  21 0000 00A24A04 		.word	72000000
+  22              		.global	AHBPrescTable
+  23              		.section	.rodata
+  24              		.align	2
+  25              		.type	AHBPrescTable, %object
+  26              		.size	AHBPrescTable, 16
+  27              	AHBPrescTable:
+  28 0000 00       		.byte	0
+  29 0001 00       		.byte	0
+  30 0002 00       		.byte	0
+  31 0003 00       		.byte	0
+  32 0004 00       		.byte	0
+  33 0005 00       		.byte	0
+  34 0006 00       		.byte	0
+  35 0007 00       		.byte	0
+  36 0008 01       		.byte	1
+  37 0009 02       		.byte	2
+  38 000a 03       		.byte	3
+  39 000b 04       		.byte	4
+  40 000c 06       		.byte	6
+  41 000d 07       		.byte	7
+  42 000e 08       		.byte	8
+  43 000f 09       		.byte	9
+  44              		.text
+  45              		.align	1
+  46              		.global	SystemInit
+  47              		.syntax unified
+  48              		.thumb
+  49              		.thumb_func
+  50              		.fpu softvfp
+  51              		.type	SystemInit, %function
+  52              	SystemInit:
+  53              	.LFB63:
+  54              		.file 1 "src/system_stm32f1xx.c"
+   1:src/system_stm32f1xx.c **** /**
+   2:src/system_stm32f1xx.c ****   ******************************************************************************
+   3:src/system_stm32f1xx.c ****   * @file    system_stm32f1xx.c
+ARM GAS  /tmp/cccYustO.s 			page 2
+
+
+   4:src/system_stm32f1xx.c ****   * @author  MCD Application Team
+   5:src/system_stm32f1xx.c ****   * @version V4.0.2
+   6:src/system_stm32f1xx.c ****   * @date    18-December-2015
+   7:src/system_stm32f1xx.c ****   * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer System Source File.
+   8:src/system_stm32f1xx.c ****   *
+   9:src/system_stm32f1xx.c ****   * 1.  This file provides two functions and one global variable to be called from
+  10:src/system_stm32f1xx.c ****   *     user application:
+  11:src/system_stm32f1xx.c ****   *      - SystemInit(): Setups the system clock (System clock source, PLL Multiplier
+  12:src/system_stm32f1xx.c ****   *                      factors, AHB/APBx prescalers and Flash settings).
+  13:src/system_stm32f1xx.c ****   *                      This function is called at startup just after reset and
+  14:src/system_stm32f1xx.c ****   *                      before branch to main program. This call is made inside
+  15:src/system_stm32f1xx.c ****   *                      the "startup_stm32f1xx_xx.s" file.
+  16:src/system_stm32f1xx.c ****   *
+  17:src/system_stm32f1xx.c ****   *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
+  18:src/system_stm32f1xx.c ****   *                                  by the user application to setup the SysTick
+  19:src/system_stm32f1xx.c ****   *                                  timer or configure other parameters.
+  20:src/system_stm32f1xx.c ****   *
+  21:src/system_stm32f1xx.c ****   *      - SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must
+  22:src/system_stm32f1xx.c ****   *                                 be called whenever the core clock is changed
+  23:src/system_stm32f1xx.c ****   *                                 during program execution.
+  24:src/system_stm32f1xx.c ****   *
+  25:src/system_stm32f1xx.c ****   * 2. After each device reset the HSI (8 MHz) is used as system clock source.
+  26:src/system_stm32f1xx.c ****   *    Then SystemInit() function is called, in "startup_stm32f1xx_xx.s" file, to
+  27:src/system_stm32f1xx.c ****   *    configure the system clock before to branch to main program.
+  28:src/system_stm32f1xx.c ****   *
+  29:src/system_stm32f1xx.c ****   * 4. The default value of HSE crystal is set to 8 MHz (or 25 MHz, depending on
+  30:src/system_stm32f1xx.c ****   *    the product used), refer to "HSE_VALUE".
+  31:src/system_stm32f1xx.c ****   *    When HSE is used as system clock source, directly or through PLL, and you
+  32:src/system_stm32f1xx.c ****   *    are using different crystal you have to adapt the HSE value to your own
+  33:src/system_stm32f1xx.c ****   *    configuration.
+  34:src/system_stm32f1xx.c ****   *
+  35:src/system_stm32f1xx.c ****   ******************************************************************************
+  36:src/system_stm32f1xx.c ****   * @attention
+  37:src/system_stm32f1xx.c ****   *
+  38:src/system_stm32f1xx.c ****   * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
+  39:src/system_stm32f1xx.c ****   *
+  40:src/system_stm32f1xx.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  41:src/system_stm32f1xx.c ****   * are permitted provided that the following conditions are met:
+  42:src/system_stm32f1xx.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  43:src/system_stm32f1xx.c ****   *      this list of conditions and the following disclaimer.
+  44:src/system_stm32f1xx.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  45:src/system_stm32f1xx.c ****   *      this list of conditions and the following disclaimer in the documentation
+  46:src/system_stm32f1xx.c ****   *      and/or other materials provided with the distribution.
+  47:src/system_stm32f1xx.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  48:src/system_stm32f1xx.c ****   *      may be used to endorse or promote products derived from this software
+  49:src/system_stm32f1xx.c ****   *      without specific prior written permission.
+  50:src/system_stm32f1xx.c ****   *
+  51:src/system_stm32f1xx.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  52:src/system_stm32f1xx.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  53:src/system_stm32f1xx.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  54:src/system_stm32f1xx.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  55:src/system_stm32f1xx.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  56:src/system_stm32f1xx.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  57:src/system_stm32f1xx.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  58:src/system_stm32f1xx.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  59:src/system_stm32f1xx.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  60:src/system_stm32f1xx.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ARM GAS  /tmp/cccYustO.s 			page 3
+
+
+  61:src/system_stm32f1xx.c ****   *
+  62:src/system_stm32f1xx.c ****   ******************************************************************************
+  63:src/system_stm32f1xx.c ****   */
+  64:src/system_stm32f1xx.c **** 
+  65:src/system_stm32f1xx.c **** /** @addtogroup CMSIS
+  66:src/system_stm32f1xx.c ****   * @{
+  67:src/system_stm32f1xx.c ****   */
+  68:src/system_stm32f1xx.c **** 
+  69:src/system_stm32f1xx.c **** /** @addtogroup stm32f1xx_system
+  70:src/system_stm32f1xx.c ****   * @{
+  71:src/system_stm32f1xx.c ****   */
+  72:src/system_stm32f1xx.c **** 
+  73:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_Includes
+  74:src/system_stm32f1xx.c ****   * @{
+  75:src/system_stm32f1xx.c ****   */
+  76:src/system_stm32f1xx.c **** 
+  77:src/system_stm32f1xx.c **** #include "stm32f1xx.h"
+  78:src/system_stm32f1xx.c **** 
+  79:src/system_stm32f1xx.c **** /**
+  80:src/system_stm32f1xx.c ****   * @}
+  81:src/system_stm32f1xx.c ****   */
+  82:src/system_stm32f1xx.c **** 
+  83:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_TypesDefinitions
+  84:src/system_stm32f1xx.c ****   * @{
+  85:src/system_stm32f1xx.c ****   */
+  86:src/system_stm32f1xx.c **** 
+  87:src/system_stm32f1xx.c **** /**
+  88:src/system_stm32f1xx.c ****   * @}
+  89:src/system_stm32f1xx.c ****   */
+  90:src/system_stm32f1xx.c **** 
+  91:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_Defines
+  92:src/system_stm32f1xx.c ****   * @{
+  93:src/system_stm32f1xx.c ****   */
+  94:src/system_stm32f1xx.c **** 
+  95:src/system_stm32f1xx.c **** #if !defined  (HSE_VALUE)
+  96:src/system_stm32f1xx.c ****   #define HSE_VALUE    ((uint32_t)8000000) /*!< Default value of the External oscillator in Hz.
+  97:src/system_stm32f1xx.c ****                                                 This value can be provided and adapted by the user 
+  98:src/system_stm32f1xx.c **** #endif /* HSE_VALUE */
+  99:src/system_stm32f1xx.c **** 
+ 100:src/system_stm32f1xx.c **** #if !defined  (HSI_VALUE)
+ 101:src/system_stm32f1xx.c ****   #define HSI_VALUE    ((uint32_t)8000000) /*!< Default value of the Internal oscillator in Hz.
+ 102:src/system_stm32f1xx.c ****                                                 This value can be provided and adapted by the user 
+ 103:src/system_stm32f1xx.c **** #endif /* HSI_VALUE */
+ 104:src/system_stm32f1xx.c **** 
+ 105:src/system_stm32f1xx.c **** /*!< Uncomment the following line if you need to use external SRAM  */
+ 106:src/system_stm32f1xx.c **** #if defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) ||
+ 107:src/system_stm32f1xx.c **** /* #define DATA_IN_ExtSRAM */
+ 108:src/system_stm32f1xx.c **** #endif /* STM32F100xE || STM32F101xE || STM32F101xG || STM32F103xE || STM32F103xG */
+ 109:src/system_stm32f1xx.c **** 
+ 110:src/system_stm32f1xx.c **** /*!< Uncomment the following line if you need to relocate your vector Table in
+ 111:src/system_stm32f1xx.c ****      Internal SRAM. */
+ 112:src/system_stm32f1xx.c **** /* #define VECT_TAB_SRAM */
+ 113:src/system_stm32f1xx.c **** #define VECT_TAB_OFFSET  0x0 /*!< Vector Table base offset field.
+ 114:src/system_stm32f1xx.c ****                                   This value must be a multiple of 0x200. */
+ 115:src/system_stm32f1xx.c **** 
+ 116:src/system_stm32f1xx.c **** 
+ 117:src/system_stm32f1xx.c **** /**
+ARM GAS  /tmp/cccYustO.s 			page 4
+
+
+ 118:src/system_stm32f1xx.c ****   * @}
+ 119:src/system_stm32f1xx.c ****   */
+ 120:src/system_stm32f1xx.c **** 
+ 121:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_Macros
+ 122:src/system_stm32f1xx.c ****   * @{
+ 123:src/system_stm32f1xx.c ****   */
+ 124:src/system_stm32f1xx.c **** 
+ 125:src/system_stm32f1xx.c **** /**
+ 126:src/system_stm32f1xx.c ****   * @}
+ 127:src/system_stm32f1xx.c ****   */
+ 128:src/system_stm32f1xx.c **** 
+ 129:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_Variables
+ 130:src/system_stm32f1xx.c ****   * @{
+ 131:src/system_stm32f1xx.c ****   */
+ 132:src/system_stm32f1xx.c **** 
+ 133:src/system_stm32f1xx.c **** /*******************************************************************************
+ 134:src/system_stm32f1xx.c **** *  Clock Definitions
+ 135:src/system_stm32f1xx.c **** *******************************************************************************/
+ 136:src/system_stm32f1xx.c **** #if defined(STM32F100xB) ||defined(STM32F100xE)
+ 137:src/system_stm32f1xx.c ****   uint32_t SystemCoreClock         = 24000000;        /*!< System Clock Frequency (Core Clock) */
+ 138:src/system_stm32f1xx.c **** #else /*!< HSI Selected as System Clock source */
+ 139:src/system_stm32f1xx.c ****   uint32_t SystemCoreClock         = 72000000;        /*!< System Clock Frequency (Core Clock) */
+ 140:src/system_stm32f1xx.c **** #endif
+ 141:src/system_stm32f1xx.c **** 
+ 142:src/system_stm32f1xx.c **** const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+ 143:src/system_stm32f1xx.c **** /**
+ 144:src/system_stm32f1xx.c ****   * @}
+ 145:src/system_stm32f1xx.c ****   */
+ 146:src/system_stm32f1xx.c **** 
+ 147:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_FunctionPrototypes
+ 148:src/system_stm32f1xx.c ****   * @{
+ 149:src/system_stm32f1xx.c ****   */
+ 150:src/system_stm32f1xx.c **** 
+ 151:src/system_stm32f1xx.c **** #if defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) ||
+ 152:src/system_stm32f1xx.c **** #ifdef DATA_IN_ExtSRAM
+ 153:src/system_stm32f1xx.c ****   static void SystemInit_ExtMemCtl(void);
+ 154:src/system_stm32f1xx.c **** #endif /* DATA_IN_ExtSRAM */
+ 155:src/system_stm32f1xx.c **** #endif /* STM32F100xE || STM32F101xE || STM32F101xG || STM32F103xE || STM32F103xG */
+ 156:src/system_stm32f1xx.c **** 
+ 157:src/system_stm32f1xx.c **** /**
+ 158:src/system_stm32f1xx.c ****   * @}
+ 159:src/system_stm32f1xx.c ****   */
+ 160:src/system_stm32f1xx.c **** 
+ 161:src/system_stm32f1xx.c **** /** @addtogroup STM32F1xx_System_Private_Functions
+ 162:src/system_stm32f1xx.c ****   * @{
+ 163:src/system_stm32f1xx.c ****   */
+ 164:src/system_stm32f1xx.c **** 
+ 165:src/system_stm32f1xx.c **** /**
+ 166:src/system_stm32f1xx.c ****   * @brief  Setup the microcontroller system
+ 167:src/system_stm32f1xx.c ****   *         Initialize the Embedded Flash Interface, the PLL and update the
+ 168:src/system_stm32f1xx.c ****   *         SystemCoreClock variable.
+ 169:src/system_stm32f1xx.c ****   * @note   This function should be used only after reset.
+ 170:src/system_stm32f1xx.c ****   * @param  None
+ 171:src/system_stm32f1xx.c ****   * @retval None
+ 172:src/system_stm32f1xx.c ****   */
+ 173:src/system_stm32f1xx.c **** void SystemInit (void)
+ 174:src/system_stm32f1xx.c **** {
+ARM GAS  /tmp/cccYustO.s 			page 5
+
+
+  55              		.loc 1 174 0
+  56              		.cfi_startproc
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 1, uses_anonymous_args = 0
+  59              		@ link register save eliminated.
+  60 0000 80B4     		push	{r7}
+  61              		.cfi_def_cfa_offset 4
+  62              		.cfi_offset 7, -4
+  63 0002 00AF     		add	r7, sp, #0
+  64              		.cfi_def_cfa_register 7
+ 175:src/system_stm32f1xx.c ****   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
+ 176:src/system_stm32f1xx.c ****   /* Set HSION bit */
+ 177:src/system_stm32f1xx.c ****   RCC->CR |= (uint32_t)0x00000001;
+  65              		.loc 1 177 0
+  66 0004 154A     		ldr	r2, .L2
+  67 0006 154B     		ldr	r3, .L2
+  68 0008 1B68     		ldr	r3, [r3]
+  69 000a 43F00103 		orr	r3, r3, #1
+  70 000e 1360     		str	r3, [r2]
+ 178:src/system_stm32f1xx.c **** 
+ 179:src/system_stm32f1xx.c ****   /* Reset SW, HPRE, PPRE1, PPRE2, ADCPRE and MCO bits */
+ 180:src/system_stm32f1xx.c **** #if !defined(STM32F105xC) && !defined(STM32F107xC)
+ 181:src/system_stm32f1xx.c ****   RCC->CFGR &= (uint32_t)0xF8FF0000;
+  71              		.loc 1 181 0
+  72 0010 1249     		ldr	r1, .L2
+  73 0012 124B     		ldr	r3, .L2
+  74 0014 5A68     		ldr	r2, [r3, #4]
+  75 0016 124B     		ldr	r3, .L2+4
+  76 0018 1340     		ands	r3, r3, r2
+  77 001a 4B60     		str	r3, [r1, #4]
+ 182:src/system_stm32f1xx.c **** #else
+ 183:src/system_stm32f1xx.c ****   RCC->CFGR &= (uint32_t)0xF0FF0000;
+ 184:src/system_stm32f1xx.c **** #endif /* STM32F105xC */
+ 185:src/system_stm32f1xx.c **** 
+ 186:src/system_stm32f1xx.c ****   /* Reset HSEON, CSSON and PLLON bits */
+ 187:src/system_stm32f1xx.c ****   RCC->CR &= (uint32_t)0xFEF6FFFF;
+  78              		.loc 1 187 0
+  79 001c 0F4A     		ldr	r2, .L2
+  80 001e 0F4B     		ldr	r3, .L2
+  81 0020 1B68     		ldr	r3, [r3]
+  82 0022 23F08473 		bic	r3, r3, #17301504
+  83 0026 23F48033 		bic	r3, r3, #65536
+  84 002a 1360     		str	r3, [r2]
+ 188:src/system_stm32f1xx.c **** 
+ 189:src/system_stm32f1xx.c ****   /* Reset HSEBYP bit */
+ 190:src/system_stm32f1xx.c ****   RCC->CR &= (uint32_t)0xFFFBFFFF;
+  85              		.loc 1 190 0
+  86 002c 0B4A     		ldr	r2, .L2
+  87 002e 0B4B     		ldr	r3, .L2
+  88 0030 1B68     		ldr	r3, [r3]
+  89 0032 23F48023 		bic	r3, r3, #262144
+  90 0036 1360     		str	r3, [r2]
+ 191:src/system_stm32f1xx.c **** 
+ 192:src/system_stm32f1xx.c ****   /* Reset PLLSRC, PLLXTPRE, PLLMUL and USBPRE/OTGFSPRE bits */
+ 193:src/system_stm32f1xx.c ****   RCC->CFGR &= (uint32_t)0xFF80FFFF;
+  91              		.loc 1 193 0
+  92 0038 084A     		ldr	r2, .L2
+ARM GAS  /tmp/cccYustO.s 			page 6
+
+
+  93 003a 084B     		ldr	r3, .L2
+  94 003c 5B68     		ldr	r3, [r3, #4]
+  95 003e 23F4FE03 		bic	r3, r3, #8323072
+  96 0042 5360     		str	r3, [r2, #4]
+ 194:src/system_stm32f1xx.c **** 
+ 195:src/system_stm32f1xx.c **** #if defined(STM32F105xC) || defined(STM32F107xC)
+ 196:src/system_stm32f1xx.c ****   /* Reset PLL2ON and PLL3ON bits */
+ 197:src/system_stm32f1xx.c ****   RCC->CR &= (uint32_t)0xEBFFFFFF;
+ 198:src/system_stm32f1xx.c **** 
+ 199:src/system_stm32f1xx.c ****   /* Disable all interrupts and clear pending bits  */
+ 200:src/system_stm32f1xx.c ****   RCC->CIR = 0x00FF0000;
+ 201:src/system_stm32f1xx.c **** 
+ 202:src/system_stm32f1xx.c ****   /* Reset CFGR2 register */
+ 203:src/system_stm32f1xx.c ****   RCC->CFGR2 = 0x00000000;
+ 204:src/system_stm32f1xx.c **** #elif defined(STM32F100xB) || defined(STM32F100xE)
+ 205:src/system_stm32f1xx.c ****   /* Disable all interrupts and clear pending bits  */
+ 206:src/system_stm32f1xx.c ****   RCC->CIR = 0x009F0000;
+ 207:src/system_stm32f1xx.c **** 
+ 208:src/system_stm32f1xx.c ****   /* Reset CFGR2 register */
+ 209:src/system_stm32f1xx.c ****   RCC->CFGR2 = 0x00000000;
+ 210:src/system_stm32f1xx.c **** #else
+ 211:src/system_stm32f1xx.c ****   /* Disable all interrupts and clear pending bits  */
+ 212:src/system_stm32f1xx.c ****   RCC->CIR = 0x009F0000;
+  97              		.loc 1 212 0
+  98 0044 054B     		ldr	r3, .L2
+  99 0046 4FF41F02 		mov	r2, #10420224
+ 100 004a 9A60     		str	r2, [r3, #8]
+ 213:src/system_stm32f1xx.c **** #endif /* STM32F105xC */
+ 214:src/system_stm32f1xx.c **** 
+ 215:src/system_stm32f1xx.c **** #if defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) ||
+ 216:src/system_stm32f1xx.c ****   #ifdef DATA_IN_ExtSRAM
+ 217:src/system_stm32f1xx.c ****     SystemInit_ExtMemCtl();
+ 218:src/system_stm32f1xx.c ****   #endif /* DATA_IN_ExtSRAM */
+ 219:src/system_stm32f1xx.c **** #endif
+ 220:src/system_stm32f1xx.c **** 
+ 221:src/system_stm32f1xx.c **** #ifdef VECT_TAB_SRAM
+ 222:src/system_stm32f1xx.c ****   SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM. */
+ 223:src/system_stm32f1xx.c **** #else
+ 224:src/system_stm32f1xx.c ****   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH. */
+ 101              		.loc 1 224 0
+ 102 004c 054B     		ldr	r3, .L2+8
+ 103 004e 4FF00062 		mov	r2, #134217728
+ 104 0052 9A60     		str	r2, [r3, #8]
+ 225:src/system_stm32f1xx.c **** #endif
+ 226:src/system_stm32f1xx.c **** }
+ 105              		.loc 1 226 0
+ 106 0054 00BF     		nop
+ 107 0056 BD46     		mov	sp, r7
+ 108              		.cfi_def_cfa_register 13
+ 109              		@ sp needed
+ 110 0058 80BC     		pop	{r7}
+ 111              		.cfi_restore 7
+ 112              		.cfi_def_cfa_offset 0
+ 113 005a 7047     		bx	lr
+ 114              	.L3:
+ 115              		.align	2
+ 116              	.L2:
+ARM GAS  /tmp/cccYustO.s 			page 7
+
+
+ 117 005c 00100240 		.word	1073876992
+ 118 0060 0000FFF8 		.word	-117506048
+ 119 0064 00ED00E0 		.word	-536810240
+ 120              		.cfi_endproc
+ 121              	.LFE63:
+ 122              		.size	SystemInit, .-SystemInit
+ 123              		.align	1
+ 124              		.global	SystemCoreClockUpdate
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 128              		.fpu softvfp
+ 129              		.type	SystemCoreClockUpdate, %function
+ 130              	SystemCoreClockUpdate:
+ 131              	.LFB64:
+ 227:src/system_stm32f1xx.c **** 
+ 228:src/system_stm32f1xx.c **** /**
+ 229:src/system_stm32f1xx.c ****   * @brief  Update SystemCoreClock variable according to Clock Register Values.
+ 230:src/system_stm32f1xx.c ****   *         The SystemCoreClock variable contains the core clock (HCLK), it can
+ 231:src/system_stm32f1xx.c ****   *         be used by the user application to setup the SysTick timer or configure
+ 232:src/system_stm32f1xx.c ****   *         other parameters.
+ 233:src/system_stm32f1xx.c ****   *
+ 234:src/system_stm32f1xx.c ****   * @note   Each time the core clock (HCLK) changes, this function must be called
+ 235:src/system_stm32f1xx.c ****   *         to update SystemCoreClock variable value. Otherwise, any configuration
+ 236:src/system_stm32f1xx.c ****   *         based on this variable will be incorrect.
+ 237:src/system_stm32f1xx.c ****   *
+ 238:src/system_stm32f1xx.c ****   * @note   - The system frequency computed by this function is not the real
+ 239:src/system_stm32f1xx.c ****   *           frequency in the chip. It is calculated based on the predefined
+ 240:src/system_stm32f1xx.c ****   *           constant and the selected clock source:
+ 241:src/system_stm32f1xx.c ****   *
+ 242:src/system_stm32f1xx.c ****   *           - If SYSCLK source is HSI, SystemCoreClock will contain the HSI_VALUE(*)
+ 243:src/system_stm32f1xx.c ****   *
+ 244:src/system_stm32f1xx.c ****   *           - If SYSCLK source is HSE, SystemCoreClock will contain the HSE_VALUE(**)
+ 245:src/system_stm32f1xx.c ****   *
+ 246:src/system_stm32f1xx.c ****   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**)
+ 247:src/system_stm32f1xx.c ****   *             or HSI_VALUE(*) multiplied by the PLL factors.
+ 248:src/system_stm32f1xx.c ****   *
+ 249:src/system_stm32f1xx.c ****   *         (*) HSI_VALUE is a constant defined in stm32f1xx.h file (default value
+ 250:src/system_stm32f1xx.c ****   *             8 MHz) but the real value may vary depending on the variations
+ 251:src/system_stm32f1xx.c ****   *             in voltage and temperature.
+ 252:src/system_stm32f1xx.c ****   *
+ 253:src/system_stm32f1xx.c ****   *         (**) HSE_VALUE is a constant defined in stm32f1xx.h file (default value
+ 254:src/system_stm32f1xx.c ****   *              8 MHz or 25 MHz, depending on the product used), user has to ensure
+ 255:src/system_stm32f1xx.c ****   *              that HSE_VALUE is same as the real frequency of the crystal used.
+ 256:src/system_stm32f1xx.c ****   *              Otherwise, this function may have wrong result.
+ 257:src/system_stm32f1xx.c ****   *
+ 258:src/system_stm32f1xx.c ****   *         - The result of this function could be not correct when using fractional
+ 259:src/system_stm32f1xx.c ****   *           value for HSE crystal.
+ 260:src/system_stm32f1xx.c ****   * @param  None
+ 261:src/system_stm32f1xx.c ****   * @retval None
+ 262:src/system_stm32f1xx.c ****   */
+ 263:src/system_stm32f1xx.c **** void SystemCoreClockUpdate (void)
+ 264:src/system_stm32f1xx.c **** {
+ 132              		.loc 1 264 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 16
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  /tmp/cccYustO.s 			page 8
+
+
+ 136              		@ link register save eliminated.
+ 137 0068 80B4     		push	{r7}
+ 138              		.cfi_def_cfa_offset 4
+ 139              		.cfi_offset 7, -4
+ 140 006a 85B0     		sub	sp, sp, #20
+ 141              		.cfi_def_cfa_offset 24
+ 142 006c 00AF     		add	r7, sp, #0
+ 143              		.cfi_def_cfa_register 7
+ 265:src/system_stm32f1xx.c ****   uint32_t tmp = 0, pllmull = 0, pllsource = 0;
+ 144              		.loc 1 265 0
+ 145 006e 0023     		movs	r3, #0
+ 146 0070 FB60     		str	r3, [r7, #12]
+ 147 0072 0023     		movs	r3, #0
+ 148 0074 BB60     		str	r3, [r7, #8]
+ 149 0076 0023     		movs	r3, #0
+ 150 0078 7B60     		str	r3, [r7, #4]
+ 266:src/system_stm32f1xx.c **** 
+ 267:src/system_stm32f1xx.c **** #if defined(STM32F105xC) || defined(STM32F107xC)
+ 268:src/system_stm32f1xx.c ****   uint32_t prediv1source = 0, prediv1factor = 0, prediv2factor = 0, pll2mull = 0;
+ 269:src/system_stm32f1xx.c **** #endif /* STM32F105xC */
+ 270:src/system_stm32f1xx.c **** 
+ 271:src/system_stm32f1xx.c **** #if defined(STM32F100xB) || defined(STM32F100xE)
+ 272:src/system_stm32f1xx.c ****   uint32_t prediv1factor = 0;
+ 273:src/system_stm32f1xx.c **** #endif /* STM32F100xB or STM32F100xE */
+ 274:src/system_stm32f1xx.c **** 
+ 275:src/system_stm32f1xx.c ****   /* Get SYSCLK source -------------------------------------------------------*/
+ 276:src/system_stm32f1xx.c ****   tmp = RCC->CFGR & RCC_CFGR_SWS;
+ 151              		.loc 1 276 0
+ 152 007a 2C4B     		ldr	r3, .L14
+ 153 007c 5B68     		ldr	r3, [r3, #4]
+ 154 007e 03F00C03 		and	r3, r3, #12
+ 155 0082 FB60     		str	r3, [r7, #12]
+ 277:src/system_stm32f1xx.c **** 
+ 278:src/system_stm32f1xx.c ****   switch (tmp)
+ 156              		.loc 1 278 0
+ 157 0084 FB68     		ldr	r3, [r7, #12]
+ 158 0086 042B     		cmp	r3, #4
+ 159 0088 07D0     		beq	.L6
+ 160 008a 082B     		cmp	r3, #8
+ 161 008c 09D0     		beq	.L7
+ 162 008e 002B     		cmp	r3, #0
+ 163 0090 33D1     		bne	.L13
+ 279:src/system_stm32f1xx.c ****   {
+ 280:src/system_stm32f1xx.c ****     case 0x00:  /* HSI used as system clock */
+ 281:src/system_stm32f1xx.c ****       SystemCoreClock = HSI_VALUE;
+ 164              		.loc 1 281 0
+ 165 0092 274B     		ldr	r3, .L14+4
+ 166 0094 274A     		ldr	r2, .L14+8
+ 167 0096 1A60     		str	r2, [r3]
+ 282:src/system_stm32f1xx.c ****       break;
+ 168              		.loc 1 282 0
+ 169 0098 33E0     		b	.L9
+ 170              	.L6:
+ 283:src/system_stm32f1xx.c ****     case 0x04:  /* HSE used as system clock */
+ 284:src/system_stm32f1xx.c ****       SystemCoreClock = HSE_VALUE;
+ 171              		.loc 1 284 0
+ 172 009a 254B     		ldr	r3, .L14+4
+ARM GAS  /tmp/cccYustO.s 			page 9
+
+
+ 173 009c 254A     		ldr	r2, .L14+8
+ 174 009e 1A60     		str	r2, [r3]
+ 285:src/system_stm32f1xx.c ****       break;
+ 175              		.loc 1 285 0
+ 176 00a0 2FE0     		b	.L9
+ 177              	.L7:
+ 286:src/system_stm32f1xx.c ****     case 0x08:  /* PLL used as system clock */
+ 287:src/system_stm32f1xx.c **** 
+ 288:src/system_stm32f1xx.c ****       /* Get PLL clock source and multiplication factor ----------------------*/
+ 289:src/system_stm32f1xx.c ****       pllmull = RCC->CFGR & RCC_CFGR_PLLMULL;
+ 178              		.loc 1 289 0
+ 179 00a2 224B     		ldr	r3, .L14
+ 180 00a4 5B68     		ldr	r3, [r3, #4]
+ 181 00a6 03F47013 		and	r3, r3, #3932160
+ 182 00aa BB60     		str	r3, [r7, #8]
+ 290:src/system_stm32f1xx.c ****       pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
+ 183              		.loc 1 290 0
+ 184 00ac 1F4B     		ldr	r3, .L14
+ 185 00ae 5B68     		ldr	r3, [r3, #4]
+ 186 00b0 03F48033 		and	r3, r3, #65536
+ 187 00b4 7B60     		str	r3, [r7, #4]
+ 291:src/system_stm32f1xx.c **** 
+ 292:src/system_stm32f1xx.c **** #if !defined(STM32F105xC) && !defined(STM32F107xC)
+ 293:src/system_stm32f1xx.c ****       pllmull = ( pllmull >> 18) + 2;
+ 188              		.loc 1 293 0
+ 189 00b6 BB68     		ldr	r3, [r7, #8]
+ 190 00b8 9B0C     		lsrs	r3, r3, #18
+ 191 00ba 0233     		adds	r3, r3, #2
+ 192 00bc BB60     		str	r3, [r7, #8]
+ 294:src/system_stm32f1xx.c **** 
+ 295:src/system_stm32f1xx.c ****       if (pllsource == 0x00)
+ 193              		.loc 1 295 0
+ 194 00be 7B68     		ldr	r3, [r7, #4]
+ 195 00c0 002B     		cmp	r3, #0
+ 196 00c2 06D1     		bne	.L10
+ 296:src/system_stm32f1xx.c ****       {
+ 297:src/system_stm32f1xx.c ****         /* HSI oscillator clock divided by 2 selected as PLL clock entry */
+ 298:src/system_stm32f1xx.c ****         SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+ 197              		.loc 1 298 0
+ 198 00c4 BB68     		ldr	r3, [r7, #8]
+ 199 00c6 1C4A     		ldr	r2, .L14+12
+ 200 00c8 02FB03F3 		mul	r3, r2, r3
+ 201 00cc 184A     		ldr	r2, .L14+4
+ 202 00ce 1360     		str	r3, [r2]
+ 299:src/system_stm32f1xx.c ****       }
+ 300:src/system_stm32f1xx.c ****       else
+ 301:src/system_stm32f1xx.c ****       {
+ 302:src/system_stm32f1xx.c ****  #if defined(STM32F100xB) || defined(STM32F100xE)
+ 303:src/system_stm32f1xx.c ****        prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
+ 304:src/system_stm32f1xx.c ****        /* HSE oscillator clock selected as PREDIV1 clock entry */
+ 305:src/system_stm32f1xx.c ****        SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
+ 306:src/system_stm32f1xx.c ****  #else
+ 307:src/system_stm32f1xx.c ****         /* HSE selected as PLL clock entry */
+ 308:src/system_stm32f1xx.c ****         if ((RCC->CFGR & RCC_CFGR_PLLXTPRE) != (uint32_t)RESET)
+ 309:src/system_stm32f1xx.c ****         {/* HSE oscillator clock divided by 2 */
+ 310:src/system_stm32f1xx.c ****           SystemCoreClock = (HSE_VALUE >> 1) * pllmull;
+ 311:src/system_stm32f1xx.c ****         }
+ARM GAS  /tmp/cccYustO.s 			page 10
+
+
+ 312:src/system_stm32f1xx.c ****         else
+ 313:src/system_stm32f1xx.c ****         {
+ 314:src/system_stm32f1xx.c ****           SystemCoreClock = HSE_VALUE * pllmull;
+ 315:src/system_stm32f1xx.c ****         }
+ 316:src/system_stm32f1xx.c ****  #endif
+ 317:src/system_stm32f1xx.c ****       }
+ 318:src/system_stm32f1xx.c **** #else
+ 319:src/system_stm32f1xx.c ****       pllmull = pllmull >> 18;
+ 320:src/system_stm32f1xx.c **** 
+ 321:src/system_stm32f1xx.c ****       if (pllmull != 0x0D)
+ 322:src/system_stm32f1xx.c ****       {
+ 323:src/system_stm32f1xx.c ****          pllmull += 2;
+ 324:src/system_stm32f1xx.c ****       }
+ 325:src/system_stm32f1xx.c ****       else
+ 326:src/system_stm32f1xx.c ****       { /* PLL multiplication factor = PLL input clock * 6.5 */
+ 327:src/system_stm32f1xx.c ****         pllmull = 13 / 2;
+ 328:src/system_stm32f1xx.c ****       }
+ 329:src/system_stm32f1xx.c **** 
+ 330:src/system_stm32f1xx.c ****       if (pllsource == 0x00)
+ 331:src/system_stm32f1xx.c ****       {
+ 332:src/system_stm32f1xx.c ****         /* HSI oscillator clock divided by 2 selected as PLL clock entry */
+ 333:src/system_stm32f1xx.c ****         SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+ 334:src/system_stm32f1xx.c ****       }
+ 335:src/system_stm32f1xx.c ****       else
+ 336:src/system_stm32f1xx.c ****       {/* PREDIV1 selected as PLL clock entry */
+ 337:src/system_stm32f1xx.c **** 
+ 338:src/system_stm32f1xx.c ****         /* Get PREDIV1 clock source and division factor */
+ 339:src/system_stm32f1xx.c ****         prediv1source = RCC->CFGR2 & RCC_CFGR2_PREDIV1SRC;
+ 340:src/system_stm32f1xx.c ****         prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
+ 341:src/system_stm32f1xx.c **** 
+ 342:src/system_stm32f1xx.c ****         if (prediv1source == 0)
+ 343:src/system_stm32f1xx.c ****         {
+ 344:src/system_stm32f1xx.c ****           /* HSE oscillator clock selected as PREDIV1 clock entry */
+ 345:src/system_stm32f1xx.c ****           SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
+ 346:src/system_stm32f1xx.c ****         }
+ 347:src/system_stm32f1xx.c ****         else
+ 348:src/system_stm32f1xx.c ****         {/* PLL2 clock selected as PREDIV1 clock entry */
+ 349:src/system_stm32f1xx.c **** 
+ 350:src/system_stm32f1xx.c ****           /* Get PREDIV2 division factor and PLL2 multiplication factor */
+ 351:src/system_stm32f1xx.c ****           prediv2factor = ((RCC->CFGR2 & RCC_CFGR2_PREDIV2) >> 4) + 1;
+ 352:src/system_stm32f1xx.c ****           pll2mull = ((RCC->CFGR2 & RCC_CFGR2_PLL2MUL) >> 8 ) + 2;
+ 353:src/system_stm32f1xx.c ****           SystemCoreClock = (((HSE_VALUE / prediv2factor) * pll2mull) / prediv1factor) * pllmull;
+ 354:src/system_stm32f1xx.c ****         }
+ 355:src/system_stm32f1xx.c ****       }
+ 356:src/system_stm32f1xx.c **** #endif /* STM32F105xC */
+ 357:src/system_stm32f1xx.c ****       break;
+ 203              		.loc 1 357 0
+ 204 00d0 17E0     		b	.L9
+ 205              	.L10:
+ 308:src/system_stm32f1xx.c ****         {/* HSE oscillator clock divided by 2 */
+ 206              		.loc 1 308 0
+ 207 00d2 164B     		ldr	r3, .L14
+ 208 00d4 5B68     		ldr	r3, [r3, #4]
+ 209 00d6 03F40033 		and	r3, r3, #131072
+ 210 00da 002B     		cmp	r3, #0
+ 211 00dc 06D0     		beq	.L12
+ 310:src/system_stm32f1xx.c ****         }
+ARM GAS  /tmp/cccYustO.s 			page 11
+
+
+ 212              		.loc 1 310 0
+ 213 00de BB68     		ldr	r3, [r7, #8]
+ 214 00e0 154A     		ldr	r2, .L14+12
+ 215 00e2 02FB03F3 		mul	r3, r2, r3
+ 216 00e6 124A     		ldr	r2, .L14+4
+ 217 00e8 1360     		str	r3, [r2]
+ 218              		.loc 1 357 0
+ 219 00ea 0AE0     		b	.L9
+ 220              	.L12:
+ 314:src/system_stm32f1xx.c ****         }
+ 221              		.loc 1 314 0
+ 222 00ec BB68     		ldr	r3, [r7, #8]
+ 223 00ee 114A     		ldr	r2, .L14+8
+ 224 00f0 02FB03F3 		mul	r3, r2, r3
+ 225 00f4 0E4A     		ldr	r2, .L14+4
+ 226 00f6 1360     		str	r3, [r2]
+ 227              		.loc 1 357 0
+ 228 00f8 03E0     		b	.L9
+ 229              	.L13:
+ 358:src/system_stm32f1xx.c **** 
+ 359:src/system_stm32f1xx.c ****     default:
+ 360:src/system_stm32f1xx.c ****       SystemCoreClock = HSI_VALUE;
+ 230              		.loc 1 360 0
+ 231 00fa 0D4B     		ldr	r3, .L14+4
+ 232 00fc 0D4A     		ldr	r2, .L14+8
+ 233 00fe 1A60     		str	r2, [r3]
+ 361:src/system_stm32f1xx.c ****       break;
+ 234              		.loc 1 361 0
+ 235 0100 00BF     		nop
+ 236              	.L9:
+ 362:src/system_stm32f1xx.c ****   }
+ 363:src/system_stm32f1xx.c **** 
+ 364:src/system_stm32f1xx.c ****   /* Compute HCLK clock frequency ----------------*/
+ 365:src/system_stm32f1xx.c ****   /* Get HCLK prescaler */
+ 366:src/system_stm32f1xx.c ****   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+ 237              		.loc 1 366 0
+ 238 0102 0A4B     		ldr	r3, .L14
+ 239 0104 5B68     		ldr	r3, [r3, #4]
+ 240 0106 1B09     		lsrs	r3, r3, #4
+ 241 0108 03F00F03 		and	r3, r3, #15
+ 242 010c 0B4A     		ldr	r2, .L14+16
+ 243 010e D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 244 0110 FB60     		str	r3, [r7, #12]
+ 367:src/system_stm32f1xx.c ****   /* HCLK clock frequency */
+ 368:src/system_stm32f1xx.c ****   SystemCoreClock >>= tmp;
+ 245              		.loc 1 368 0
+ 246 0112 074B     		ldr	r3, .L14+4
+ 247 0114 1A68     		ldr	r2, [r3]
+ 248 0116 FB68     		ldr	r3, [r7, #12]
+ 249 0118 22FA03F3 		lsr	r3, r2, r3
+ 250 011c 044A     		ldr	r2, .L14+4
+ 251 011e 1360     		str	r3, [r2]
+ 369:src/system_stm32f1xx.c **** }
+ 252              		.loc 1 369 0
+ 253 0120 00BF     		nop
+ 254 0122 1437     		adds	r7, r7, #20
+ 255              		.cfi_def_cfa_offset 4
+ARM GAS  /tmp/cccYustO.s 			page 12
+
+
+ 256 0124 BD46     		mov	sp, r7
+ 257              		.cfi_def_cfa_register 13
+ 258              		@ sp needed
+ 259 0126 80BC     		pop	{r7}
+ 260              		.cfi_restore 7
+ 261              		.cfi_def_cfa_offset 0
+ 262 0128 7047     		bx	lr
+ 263              	.L15:
+ 264 012a 00BF     		.align	2
+ 265              	.L14:
+ 266 012c 00100240 		.word	1073876992
+ 267 0130 00000000 		.word	SystemCoreClock
+ 268 0134 00127A00 		.word	8000000
+ 269 0138 00093D00 		.word	4000000
+ 270 013c 00000000 		.word	AHBPrescTable
+ 271              		.cfi_endproc
+ 272              	.LFE64:
+ 273              		.size	SystemCoreClockUpdate, .-SystemCoreClockUpdate
+ 274              	.Letext0:
+ 275              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 276              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 277              		.file 4 "cmsis/core_cm3.h"
+ 278              		.file 5 "include/system_stm32f1xx.h"
+ 279              		.file 6 "include/stm32f103xb.h"
+ 280              		.file 7 "include/stm32f1xx.h"
+ 281              		.section	.debug_info,"",%progbits
+ 282              	.Ldebug_info0:
+ 283 0000 B3030000 		.4byte	0x3b3
+ 284 0004 0400     		.2byte	0x4
+ 285 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 286 000a 04       		.byte	0x4
+ 287 000b 01       		.uleb128 0x1
+ 288 000c 50010000 		.4byte	.LASF46
+ 289 0010 0C       		.byte	0xc
+ 290 0011 97010000 		.4byte	.LASF47
+ 291 0015 CA000000 		.4byte	.LASF48
+ 292 0019 00000000 		.4byte	.Ltext0
+ 293 001d 40010000 		.4byte	.Letext0-.Ltext0
+ 294 0021 00000000 		.4byte	.Ldebug_line0
+ 295 0025 02       		.uleb128 0x2
+ 296 0026 01       		.byte	0x1
+ 297 0027 06       		.byte	0x6
+ 298 0028 33020000 		.4byte	.LASF0
+ 299 002c 03       		.uleb128 0x3
+ 300 002d 24000000 		.4byte	.LASF4
+ 301 0031 02       		.byte	0x2
+ 302 0032 1D       		.byte	0x1d
+ 303 0033 37000000 		.4byte	0x37
+ 304 0037 02       		.uleb128 0x2
+ 305 0038 01       		.byte	0x1
+ 306 0039 08       		.byte	0x8
+ 307 003a 70000000 		.4byte	.LASF1
+ 308 003e 02       		.uleb128 0x2
+ 309 003f 02       		.byte	0x2
+ 310 0040 05       		.byte	0x5
+ 311 0041 F9000000 		.4byte	.LASF2
+ 312 0045 02       		.uleb128 0x2
+ARM GAS  /tmp/cccYustO.s 			page 13
+
+
+ 313 0046 02       		.byte	0x2
+ 314 0047 07       		.byte	0x7
+ 315 0048 43000000 		.4byte	.LASF3
+ 316 004c 03       		.uleb128 0x3
+ 317 004d 2E000000 		.4byte	.LASF5
+ 318 0051 02       		.byte	0x2
+ 319 0052 3F       		.byte	0x3f
+ 320 0053 57000000 		.4byte	0x57
+ 321 0057 02       		.uleb128 0x2
+ 322 0058 04       		.byte	0x4
+ 323 0059 05       		.byte	0x5
+ 324 005a 2A020000 		.4byte	.LASF6
+ 325 005e 03       		.uleb128 0x3
+ 326 005f 8C000000 		.4byte	.LASF7
+ 327 0063 02       		.byte	0x2
+ 328 0064 41       		.byte	0x41
+ 329 0065 69000000 		.4byte	0x69
+ 330 0069 02       		.uleb128 0x2
+ 331 006a 04       		.byte	0x4
+ 332 006b 07       		.byte	0x7
+ 333 006c 97000000 		.4byte	.LASF8
+ 334 0070 02       		.uleb128 0x2
+ 335 0071 08       		.byte	0x8
+ 336 0072 05       		.byte	0x5
+ 337 0073 CF010000 		.4byte	.LASF9
+ 338 0077 02       		.uleb128 0x2
+ 339 0078 08       		.byte	0x8
+ 340 0079 07       		.byte	0x7
+ 341 007a 39010000 		.4byte	.LASF10
+ 342 007e 04       		.uleb128 0x4
+ 343 007f 04       		.byte	0x4
+ 344 0080 05       		.byte	0x5
+ 345 0081 696E7400 		.ascii	"int\000"
+ 346 0085 02       		.uleb128 0x2
+ 347 0086 04       		.byte	0x4
+ 348 0087 07       		.byte	0x7
+ 349 0088 1D010000 		.4byte	.LASF11
+ 350 008c 03       		.uleb128 0x3
+ 351 008d 56000000 		.4byte	.LASF12
+ 352 0091 03       		.byte	0x3
+ 353 0092 18       		.byte	0x18
+ 354 0093 2C000000 		.4byte	0x2c
+ 355 0097 05       		.uleb128 0x5
+ 356 0098 8C000000 		.4byte	0x8c
+ 357 009c 06       		.uleb128 0x6
+ 358 009d 8C000000 		.4byte	0x8c
+ 359 00a1 03       		.uleb128 0x3
+ 360 00a2 BE010000 		.4byte	.LASF13
+ 361 00a6 03       		.byte	0x3
+ 362 00a7 2C       		.byte	0x2c
+ 363 00a8 4C000000 		.4byte	0x4c
+ 364 00ac 05       		.uleb128 0x5
+ 365 00ad A1000000 		.4byte	0xa1
+ 366 00b1 03       		.uleb128 0x3
+ 367 00b2 21020000 		.4byte	.LASF14
+ 368 00b6 03       		.byte	0x3
+ 369 00b7 30       		.byte	0x30
+ARM GAS  /tmp/cccYustO.s 			page 14
+
+
+ 370 00b8 5E000000 		.4byte	0x5e
+ 371 00bc 05       		.uleb128 0x5
+ 372 00bd B1000000 		.4byte	0xb1
+ 373 00c1 06       		.uleb128 0x6
+ 374 00c2 BC000000 		.4byte	0xbc
+ 375 00c6 02       		.uleb128 0x2
+ 376 00c7 04       		.byte	0x4
+ 377 00c8 07       		.byte	0x7
+ 378 00c9 C6010000 		.4byte	.LASF15
+ 379 00cd 07       		.uleb128 0x7
+ 380 00ce 8C       		.byte	0x8c
+ 381 00cf 04       		.byte	0x4
+ 382 00d0 A101     		.2byte	0x1a1
+ 383 00d2 E8010000 		.4byte	0x1e8
+ 384 00d6 08       		.uleb128 0x8
+ 385 00d7 DD010000 		.4byte	.LASF16
+ 386 00db 04       		.byte	0x4
+ 387 00dc A301     		.2byte	0x1a3
+ 388 00de C1000000 		.4byte	0xc1
+ 389 00e2 00       		.byte	0
+ 390 00e3 08       		.uleb128 0x8
+ 391 00e4 C5000000 		.4byte	.LASF17
+ 392 00e8 04       		.byte	0x4
+ 393 00e9 A401     		.2byte	0x1a4
+ 394 00eb BC000000 		.4byte	0xbc
+ 395 00ef 04       		.byte	0x4
+ 396 00f0 08       		.uleb128 0x8
+ 397 00f1 BB000000 		.4byte	.LASF18
+ 398 00f5 04       		.byte	0x4
+ 399 00f6 A501     		.2byte	0x1a5
+ 400 00f8 BC000000 		.4byte	0xbc
+ 401 00fc 08       		.byte	0x8
+ 402 00fd 08       		.uleb128 0x8
+ 403 00fe AE010000 		.4byte	.LASF19
+ 404 0102 04       		.byte	0x4
+ 405 0103 A601     		.2byte	0x1a6
+ 406 0105 BC000000 		.4byte	0xbc
+ 407 0109 0C       		.byte	0xc
+ 408 010a 09       		.uleb128 0x9
+ 409 010b 53435200 		.ascii	"SCR\000"
+ 410 010f 04       		.byte	0x4
+ 411 0110 A701     		.2byte	0x1a7
+ 412 0112 BC000000 		.4byte	0xbc
+ 413 0116 10       		.byte	0x10
+ 414 0117 09       		.uleb128 0x9
+ 415 0118 43435200 		.ascii	"CCR\000"
+ 416 011c 04       		.byte	0x4
+ 417 011d A801     		.2byte	0x1a8
+ 418 011f BC000000 		.4byte	0xbc
+ 419 0123 14       		.byte	0x14
+ 420 0124 09       		.uleb128 0x9
+ 421 0125 53485000 		.ascii	"SHP\000"
+ 422 0129 04       		.byte	0x4
+ 423 012a A901     		.2byte	0x1a9
+ 424 012c F8010000 		.4byte	0x1f8
+ 425 0130 18       		.byte	0x18
+ 426 0131 08       		.uleb128 0x8
+ARM GAS  /tmp/cccYustO.s 			page 15
+
+
+ 427 0132 1E000000 		.4byte	.LASF20
+ 428 0136 04       		.byte	0x4
+ 429 0137 AA01     		.2byte	0x1aa
+ 430 0139 BC000000 		.4byte	0xbc
+ 431 013d 24       		.byte	0x24
+ 432 013e 08       		.uleb128 0x8
+ 433 013f A9000000 		.4byte	.LASF21
+ 434 0143 04       		.byte	0x4
+ 435 0144 AB01     		.2byte	0x1ab
+ 436 0146 BC000000 		.4byte	0xbc
+ 437 014a 28       		.byte	0x28
+ 438 014b 08       		.uleb128 0x8
+ 439 014c C0000000 		.4byte	.LASF22
+ 440 0150 04       		.byte	0x4
+ 441 0151 AC01     		.2byte	0x1ac
+ 442 0153 BC000000 		.4byte	0xbc
+ 443 0157 2C       		.byte	0x2c
+ 444 0158 08       		.uleb128 0x8
+ 445 0159 34010000 		.4byte	.LASF23
+ 446 015d 04       		.byte	0x4
+ 447 015e AD01     		.2byte	0x1ad
+ 448 0160 BC000000 		.4byte	0xbc
+ 449 0164 30       		.byte	0x30
+ 450 0165 08       		.uleb128 0x8
+ 451 0166 0F020000 		.4byte	.LASF24
+ 452 016a 04       		.byte	0x4
+ 453 016b AE01     		.2byte	0x1ae
+ 454 016d BC000000 		.4byte	0xbc
+ 455 0171 34       		.byte	0x34
+ 456 0172 08       		.uleb128 0x8
+ 457 0173 B9010000 		.4byte	.LASF25
+ 458 0177 04       		.byte	0x4
+ 459 0178 AF01     		.2byte	0x1af
+ 460 017a BC000000 		.4byte	0xbc
+ 461 017e 38       		.byte	0x38
+ 462 017f 08       		.uleb128 0x8
+ 463 0180 3F020000 		.4byte	.LASF26
+ 464 0184 04       		.byte	0x4
+ 465 0185 B001     		.2byte	0x1b0
+ 466 0187 BC000000 		.4byte	0xbc
+ 467 018b 3C       		.byte	0x3c
+ 468 018c 09       		.uleb128 0x9
+ 469 018d 50465200 		.ascii	"PFR\000"
+ 470 0191 04       		.byte	0x4
+ 471 0192 B101     		.2byte	0x1b1
+ 472 0194 12020000 		.4byte	0x212
+ 473 0198 40       		.byte	0x40
+ 474 0199 09       		.uleb128 0x9
+ 475 019a 44465200 		.ascii	"DFR\000"
+ 476 019e 04       		.byte	0x4
+ 477 019f B201     		.2byte	0x1b2
+ 478 01a1 C1000000 		.4byte	0xc1
+ 479 01a5 48       		.byte	0x48
+ 480 01a6 09       		.uleb128 0x9
+ 481 01a7 41445200 		.ascii	"ADR\000"
+ 482 01ab 04       		.byte	0x4
+ 483 01ac B301     		.2byte	0x1b3
+ARM GAS  /tmp/cccYustO.s 			page 16
+
+
+ 484 01ae C1000000 		.4byte	0xc1
+ 485 01b2 4C       		.byte	0x4c
+ 486 01b3 08       		.uleb128 0x8
+ 487 01b4 19000000 		.4byte	.LASF27
+ 488 01b8 04       		.byte	0x4
+ 489 01b9 B401     		.2byte	0x1b4
+ 490 01bb 2C020000 		.4byte	0x22c
+ 491 01bf 50       		.byte	0x50
+ 492 01c0 08       		.uleb128 0x8
+ 493 01c1 B4010000 		.4byte	.LASF28
+ 494 01c5 04       		.byte	0x4
+ 495 01c6 B501     		.2byte	0x1b5
+ 496 01c8 46020000 		.4byte	0x246
+ 497 01cc 60       		.byte	0x60
+ 498 01cd 08       		.uleb128 0x8
+ 499 01ce 5E000000 		.4byte	.LASF29
+ 500 01d2 04       		.byte	0x4
+ 501 01d3 B601     		.2byte	0x1b6
+ 502 01d5 4B020000 		.4byte	0x24b
+ 503 01d9 74       		.byte	0x74
+ 504 01da 08       		.uleb128 0x8
+ 505 01db E3010000 		.4byte	.LASF30
+ 506 01df 04       		.byte	0x4
+ 507 01e0 B701     		.2byte	0x1b7
+ 508 01e2 BC000000 		.4byte	0xbc
+ 509 01e6 88       		.byte	0x88
+ 510 01e7 00       		.byte	0
+ 511 01e8 0A       		.uleb128 0xa
+ 512 01e9 97000000 		.4byte	0x97
+ 513 01ed F8010000 		.4byte	0x1f8
+ 514 01f1 0B       		.uleb128 0xb
+ 515 01f2 C6000000 		.4byte	0xc6
+ 516 01f6 0B       		.byte	0xb
+ 517 01f7 00       		.byte	0
+ 518 01f8 05       		.uleb128 0x5
+ 519 01f9 E8010000 		.4byte	0x1e8
+ 520 01fd 0A       		.uleb128 0xa
+ 521 01fe C1000000 		.4byte	0xc1
+ 522 0202 0D020000 		.4byte	0x20d
+ 523 0206 0B       		.uleb128 0xb
+ 524 0207 C6000000 		.4byte	0xc6
+ 525 020b 01       		.byte	0x1
+ 526 020c 00       		.byte	0
+ 527 020d 06       		.uleb128 0x6
+ 528 020e FD010000 		.4byte	0x1fd
+ 529 0212 05       		.uleb128 0x5
+ 530 0213 0D020000 		.4byte	0x20d
+ 531 0217 0A       		.uleb128 0xa
+ 532 0218 C1000000 		.4byte	0xc1
+ 533 021c 27020000 		.4byte	0x227
+ 534 0220 0B       		.uleb128 0xb
+ 535 0221 C6000000 		.4byte	0xc6
+ 536 0225 03       		.byte	0x3
+ 537 0226 00       		.byte	0
+ 538 0227 06       		.uleb128 0x6
+ 539 0228 17020000 		.4byte	0x217
+ 540 022c 05       		.uleb128 0x5
+ARM GAS  /tmp/cccYustO.s 			page 17
+
+
+ 541 022d 27020000 		.4byte	0x227
+ 542 0231 0A       		.uleb128 0xa
+ 543 0232 C1000000 		.4byte	0xc1
+ 544 0236 41020000 		.4byte	0x241
+ 545 023a 0B       		.uleb128 0xb
+ 546 023b C6000000 		.4byte	0xc6
+ 547 023f 04       		.byte	0x4
+ 548 0240 00       		.byte	0
+ 549 0241 06       		.uleb128 0x6
+ 550 0242 31020000 		.4byte	0x231
+ 551 0246 05       		.uleb128 0x5
+ 552 0247 41020000 		.4byte	0x241
+ 553 024b 0A       		.uleb128 0xa
+ 554 024c B1000000 		.4byte	0xb1
+ 555 0250 5B020000 		.4byte	0x25b
+ 556 0254 0B       		.uleb128 0xb
+ 557 0255 C6000000 		.4byte	0xc6
+ 558 0259 04       		.byte	0x4
+ 559 025a 00       		.byte	0
+ 560 025b 0C       		.uleb128 0xc
+ 561 025c 14010000 		.4byte	.LASF31
+ 562 0260 04       		.byte	0x4
+ 563 0261 B801     		.2byte	0x1b8
+ 564 0263 CD000000 		.4byte	0xcd
+ 565 0267 0D       		.uleb128 0xd
+ 566 0268 AE000000 		.4byte	.LASF32
+ 567 026c 04       		.byte	0x4
+ 568 026d 9606     		.2byte	0x696
+ 569 026f AC000000 		.4byte	0xac
+ 570 0273 0E       		.uleb128 0xe
+ 571 0274 E9010000 		.4byte	.LASF33
+ 572 0278 05       		.byte	0x5
+ 573 0279 45       		.byte	0x45
+ 574 027a B1000000 		.4byte	0xb1
+ 575 027e 07       		.uleb128 0x7
+ 576 027f 28       		.byte	0x28
+ 577 0280 06       		.byte	0x6
+ 578 0281 B801     		.2byte	0x1b8
+ 579 0283 09030000 		.4byte	0x309
+ 580 0287 09       		.uleb128 0x9
+ 581 0288 435200   		.ascii	"CR\000"
+ 582 028b 06       		.byte	0x6
+ 583 028c BA01     		.2byte	0x1ba
+ 584 028e BC000000 		.4byte	0xbc
+ 585 0292 00       		.byte	0
+ 586 0293 08       		.uleb128 0x8
+ 587 0294 0D000000 		.4byte	.LASF34
+ 588 0298 06       		.byte	0x6
+ 589 0299 BB01     		.2byte	0x1bb
+ 590 029b BC000000 		.4byte	0xbc
+ 591 029f 04       		.byte	0x4
+ 592 02a0 09       		.uleb128 0x9
+ 593 02a1 43495200 		.ascii	"CIR\000"
+ 594 02a5 06       		.byte	0x6
+ 595 02a6 BC01     		.2byte	0x1bc
+ 596 02a8 BC000000 		.4byte	0xbc
+ 597 02ac 08       		.byte	0x8
+ARM GAS  /tmp/cccYustO.s 			page 18
+
+
+ 598 02ad 08       		.uleb128 0x8
+ 599 02ae 0B010000 		.4byte	.LASF35
+ 600 02b2 06       		.byte	0x6
+ 601 02b3 BD01     		.2byte	0x1bd
+ 602 02b5 BC000000 		.4byte	0xbc
+ 603 02b9 0C       		.byte	0xc
+ 604 02ba 08       		.uleb128 0x8
+ 605 02bb F0000000 		.4byte	.LASF36
+ 606 02bf 06       		.byte	0x6
+ 607 02c0 BE01     		.2byte	0x1be
+ 608 02c2 BC000000 		.4byte	0xbc
+ 609 02c6 10       		.byte	0x10
+ 610 02c7 08       		.uleb128 0x8
+ 611 02c8 12000000 		.4byte	.LASF37
+ 612 02cc 06       		.byte	0x6
+ 613 02cd BF01     		.2byte	0x1bf
+ 614 02cf BC000000 		.4byte	0xbc
+ 615 02d3 14       		.byte	0x14
+ 616 02d4 08       		.uleb128 0x8
+ 617 02d5 68000000 		.4byte	.LASF38
+ 618 02d9 06       		.byte	0x6
+ 619 02da C001     		.2byte	0x1c0
+ 620 02dc BC000000 		.4byte	0xbc
+ 621 02e0 18       		.byte	0x18
+ 622 02e1 08       		.uleb128 0x8
+ 623 02e2 03010000 		.4byte	.LASF39
+ 624 02e6 06       		.byte	0x6
+ 625 02e7 C101     		.2byte	0x1c1
+ 626 02e9 BC000000 		.4byte	0xbc
+ 627 02ed 1C       		.byte	0x1c
+ 628 02ee 08       		.uleb128 0x8
+ 629 02ef 08000000 		.4byte	.LASF40
+ 630 02f3 06       		.byte	0x6
+ 631 02f4 C201     		.2byte	0x1c2
+ 632 02f6 BC000000 		.4byte	0xbc
+ 633 02fa 20       		.byte	0x20
+ 634 02fb 09       		.uleb128 0x9
+ 635 02fc 43535200 		.ascii	"CSR\000"
+ 636 0300 06       		.byte	0x6
+ 637 0301 C301     		.2byte	0x1c3
+ 638 0303 BC000000 		.4byte	0xbc
+ 639 0307 24       		.byte	0x24
+ 640 0308 00       		.byte	0
+ 641 0309 0C       		.uleb128 0xc
+ 642 030a 15020000 		.4byte	.LASF41
+ 643 030e 06       		.byte	0x6
+ 644 030f C601     		.2byte	0x1c6
+ 645 0311 7E020000 		.4byte	0x27e
+ 646 0315 0F       		.uleb128 0xf
+ 647 0316 01       		.byte	0x1
+ 648 0317 37000000 		.4byte	0x37
+ 649 031b 07       		.byte	0x7
+ 650 031c AA       		.byte	0xaa
+ 651 031d 2E030000 		.4byte	0x32e
+ 652 0321 10       		.uleb128 0x10
+ 653 0322 44020000 		.4byte	.LASF42
+ 654 0326 00       		.byte	0
+ARM GAS  /tmp/cccYustO.s 			page 19
+
+
+ 655 0327 11       		.uleb128 0x11
+ 656 0328 53455400 		.ascii	"SET\000"
+ 657 032c 01       		.byte	0x1
+ 658 032d 00       		.byte	0
+ 659 032e 12       		.uleb128 0x12
+ 660 032f 73020000 		.4byte	0x273
+ 661 0333 01       		.byte	0x1
+ 662 0334 8B       		.byte	0x8b
+ 663 0335 05       		.uleb128 0x5
+ 664 0336 03       		.byte	0x3
+ 665 0337 00000000 		.4byte	SystemCoreClock
+ 666 033b 0A       		.uleb128 0xa
+ 667 033c 9C000000 		.4byte	0x9c
+ 668 0340 4B030000 		.4byte	0x34b
+ 669 0344 0B       		.uleb128 0xb
+ 670 0345 C6000000 		.4byte	0xc6
+ 671 0349 0F       		.byte	0xf
+ 672 034a 00       		.byte	0
+ 673 034b 06       		.uleb128 0x6
+ 674 034c 3B030000 		.4byte	0x33b
+ 675 0350 13       		.uleb128 0x13
+ 676 0351 7E000000 		.4byte	.LASF43
+ 677 0355 01       		.byte	0x1
+ 678 0356 8E       		.byte	0x8e
+ 679 0357 4B030000 		.4byte	0x34b
+ 680 035b 05       		.uleb128 0x5
+ 681 035c 03       		.byte	0x3
+ 682 035d 00000000 		.4byte	AHBPrescTable
+ 683 0361 14       		.uleb128 0x14
+ 684 0362 F9010000 		.4byte	.LASF49
+ 685 0366 01       		.byte	0x1
+ 686 0367 0701     		.2byte	0x107
+ 687 0369 68000000 		.4byte	.LFB64
+ 688 036d D8000000 		.4byte	.LFE64-.LFB64
+ 689 0371 01       		.uleb128 0x1
+ 690 0372 9C       		.byte	0x9c
+ 691 0373 A5030000 		.4byte	0x3a5
+ 692 0377 15       		.uleb128 0x15
+ 693 0378 746D7000 		.ascii	"tmp\000"
+ 694 037c 01       		.byte	0x1
+ 695 037d 0901     		.2byte	0x109
+ 696 037f B1000000 		.4byte	0xb1
+ 697 0383 02       		.uleb128 0x2
+ 698 0384 91       		.byte	0x91
+ 699 0385 74       		.sleb128 -12
+ 700 0386 16       		.uleb128 0x16
+ 701 0387 00000000 		.4byte	.LASF44
+ 702 038b 01       		.byte	0x1
+ 703 038c 0901     		.2byte	0x109
+ 704 038e B1000000 		.4byte	0xb1
+ 705 0392 02       		.uleb128 0x2
+ 706 0393 91       		.byte	0x91
+ 707 0394 70       		.sleb128 -16
+ 708 0395 16       		.uleb128 0x16
+ 709 0396 2A010000 		.4byte	.LASF45
+ 710 039a 01       		.byte	0x1
+ 711 039b 0901     		.2byte	0x109
+ARM GAS  /tmp/cccYustO.s 			page 20
+
+
+ 712 039d B1000000 		.4byte	0xb1
+ 713 03a1 02       		.uleb128 0x2
+ 714 03a2 91       		.byte	0x91
+ 715 03a3 6C       		.sleb128 -20
+ 716 03a4 00       		.byte	0
+ 717 03a5 17       		.uleb128 0x17
+ 718 03a6 38000000 		.4byte	.LASF50
+ 719 03aa 01       		.byte	0x1
+ 720 03ab AD       		.byte	0xad
+ 721 03ac 00000000 		.4byte	.LFB63
+ 722 03b0 68000000 		.4byte	.LFE63-.LFB63
+ 723 03b4 01       		.uleb128 0x1
+ 724 03b5 9C       		.byte	0x9c
+ 725 03b6 00       		.byte	0
+ 726              		.section	.debug_abbrev,"",%progbits
+ 727              	.Ldebug_abbrev0:
+ 728 0000 01       		.uleb128 0x1
+ 729 0001 11       		.uleb128 0x11
+ 730 0002 01       		.byte	0x1
+ 731 0003 25       		.uleb128 0x25
+ 732 0004 0E       		.uleb128 0xe
+ 733 0005 13       		.uleb128 0x13
+ 734 0006 0B       		.uleb128 0xb
+ 735 0007 03       		.uleb128 0x3
+ 736 0008 0E       		.uleb128 0xe
+ 737 0009 1B       		.uleb128 0x1b
+ 738 000a 0E       		.uleb128 0xe
+ 739 000b 11       		.uleb128 0x11
+ 740 000c 01       		.uleb128 0x1
+ 741 000d 12       		.uleb128 0x12
+ 742 000e 06       		.uleb128 0x6
+ 743 000f 10       		.uleb128 0x10
+ 744 0010 17       		.uleb128 0x17
+ 745 0011 00       		.byte	0
+ 746 0012 00       		.byte	0
+ 747 0013 02       		.uleb128 0x2
+ 748 0014 24       		.uleb128 0x24
+ 749 0015 00       		.byte	0
+ 750 0016 0B       		.uleb128 0xb
+ 751 0017 0B       		.uleb128 0xb
+ 752 0018 3E       		.uleb128 0x3e
+ 753 0019 0B       		.uleb128 0xb
+ 754 001a 03       		.uleb128 0x3
+ 755 001b 0E       		.uleb128 0xe
+ 756 001c 00       		.byte	0
+ 757 001d 00       		.byte	0
+ 758 001e 03       		.uleb128 0x3
+ 759 001f 16       		.uleb128 0x16
+ 760 0020 00       		.byte	0
+ 761 0021 03       		.uleb128 0x3
+ 762 0022 0E       		.uleb128 0xe
+ 763 0023 3A       		.uleb128 0x3a
+ 764 0024 0B       		.uleb128 0xb
+ 765 0025 3B       		.uleb128 0x3b
+ 766 0026 0B       		.uleb128 0xb
+ 767 0027 49       		.uleb128 0x49
+ 768 0028 13       		.uleb128 0x13
+ARM GAS  /tmp/cccYustO.s 			page 21
+
+
+ 769 0029 00       		.byte	0
+ 770 002a 00       		.byte	0
+ 771 002b 04       		.uleb128 0x4
+ 772 002c 24       		.uleb128 0x24
+ 773 002d 00       		.byte	0
+ 774 002e 0B       		.uleb128 0xb
+ 775 002f 0B       		.uleb128 0xb
+ 776 0030 3E       		.uleb128 0x3e
+ 777 0031 0B       		.uleb128 0xb
+ 778 0032 03       		.uleb128 0x3
+ 779 0033 08       		.uleb128 0x8
+ 780 0034 00       		.byte	0
+ 781 0035 00       		.byte	0
+ 782 0036 05       		.uleb128 0x5
+ 783 0037 35       		.uleb128 0x35
+ 784 0038 00       		.byte	0
+ 785 0039 49       		.uleb128 0x49
+ 786 003a 13       		.uleb128 0x13
+ 787 003b 00       		.byte	0
+ 788 003c 00       		.byte	0
+ 789 003d 06       		.uleb128 0x6
+ 790 003e 26       		.uleb128 0x26
+ 791 003f 00       		.byte	0
+ 792 0040 49       		.uleb128 0x49
+ 793 0041 13       		.uleb128 0x13
+ 794 0042 00       		.byte	0
+ 795 0043 00       		.byte	0
+ 796 0044 07       		.uleb128 0x7
+ 797 0045 13       		.uleb128 0x13
+ 798 0046 01       		.byte	0x1
+ 799 0047 0B       		.uleb128 0xb
+ 800 0048 0B       		.uleb128 0xb
+ 801 0049 3A       		.uleb128 0x3a
+ 802 004a 0B       		.uleb128 0xb
+ 803 004b 3B       		.uleb128 0x3b
+ 804 004c 05       		.uleb128 0x5
+ 805 004d 01       		.uleb128 0x1
+ 806 004e 13       		.uleb128 0x13
+ 807 004f 00       		.byte	0
+ 808 0050 00       		.byte	0
+ 809 0051 08       		.uleb128 0x8
+ 810 0052 0D       		.uleb128 0xd
+ 811 0053 00       		.byte	0
+ 812 0054 03       		.uleb128 0x3
+ 813 0055 0E       		.uleb128 0xe
+ 814 0056 3A       		.uleb128 0x3a
+ 815 0057 0B       		.uleb128 0xb
+ 816 0058 3B       		.uleb128 0x3b
+ 817 0059 05       		.uleb128 0x5
+ 818 005a 49       		.uleb128 0x49
+ 819 005b 13       		.uleb128 0x13
+ 820 005c 38       		.uleb128 0x38
+ 821 005d 0B       		.uleb128 0xb
+ 822 005e 00       		.byte	0
+ 823 005f 00       		.byte	0
+ 824 0060 09       		.uleb128 0x9
+ 825 0061 0D       		.uleb128 0xd
+ARM GAS  /tmp/cccYustO.s 			page 22
+
+
+ 826 0062 00       		.byte	0
+ 827 0063 03       		.uleb128 0x3
+ 828 0064 08       		.uleb128 0x8
+ 829 0065 3A       		.uleb128 0x3a
+ 830 0066 0B       		.uleb128 0xb
+ 831 0067 3B       		.uleb128 0x3b
+ 832 0068 05       		.uleb128 0x5
+ 833 0069 49       		.uleb128 0x49
+ 834 006a 13       		.uleb128 0x13
+ 835 006b 38       		.uleb128 0x38
+ 836 006c 0B       		.uleb128 0xb
+ 837 006d 00       		.byte	0
+ 838 006e 00       		.byte	0
+ 839 006f 0A       		.uleb128 0xa
+ 840 0070 01       		.uleb128 0x1
+ 841 0071 01       		.byte	0x1
+ 842 0072 49       		.uleb128 0x49
+ 843 0073 13       		.uleb128 0x13
+ 844 0074 01       		.uleb128 0x1
+ 845 0075 13       		.uleb128 0x13
+ 846 0076 00       		.byte	0
+ 847 0077 00       		.byte	0
+ 848 0078 0B       		.uleb128 0xb
+ 849 0079 21       		.uleb128 0x21
+ 850 007a 00       		.byte	0
+ 851 007b 49       		.uleb128 0x49
+ 852 007c 13       		.uleb128 0x13
+ 853 007d 2F       		.uleb128 0x2f
+ 854 007e 0B       		.uleb128 0xb
+ 855 007f 00       		.byte	0
+ 856 0080 00       		.byte	0
+ 857 0081 0C       		.uleb128 0xc
+ 858 0082 16       		.uleb128 0x16
+ 859 0083 00       		.byte	0
+ 860 0084 03       		.uleb128 0x3
+ 861 0085 0E       		.uleb128 0xe
+ 862 0086 3A       		.uleb128 0x3a
+ 863 0087 0B       		.uleb128 0xb
+ 864 0088 3B       		.uleb128 0x3b
+ 865 0089 05       		.uleb128 0x5
+ 866 008a 49       		.uleb128 0x49
+ 867 008b 13       		.uleb128 0x13
+ 868 008c 00       		.byte	0
+ 869 008d 00       		.byte	0
+ 870 008e 0D       		.uleb128 0xd
+ 871 008f 34       		.uleb128 0x34
+ 872 0090 00       		.byte	0
+ 873 0091 03       		.uleb128 0x3
+ 874 0092 0E       		.uleb128 0xe
+ 875 0093 3A       		.uleb128 0x3a
+ 876 0094 0B       		.uleb128 0xb
+ 877 0095 3B       		.uleb128 0x3b
+ 878 0096 05       		.uleb128 0x5
+ 879 0097 49       		.uleb128 0x49
+ 880 0098 13       		.uleb128 0x13
+ 881 0099 3F       		.uleb128 0x3f
+ 882 009a 19       		.uleb128 0x19
+ARM GAS  /tmp/cccYustO.s 			page 23
+
+
+ 883 009b 3C       		.uleb128 0x3c
+ 884 009c 19       		.uleb128 0x19
+ 885 009d 00       		.byte	0
+ 886 009e 00       		.byte	0
+ 887 009f 0E       		.uleb128 0xe
+ 888 00a0 34       		.uleb128 0x34
+ 889 00a1 00       		.byte	0
+ 890 00a2 03       		.uleb128 0x3
+ 891 00a3 0E       		.uleb128 0xe
+ 892 00a4 3A       		.uleb128 0x3a
+ 893 00a5 0B       		.uleb128 0xb
+ 894 00a6 3B       		.uleb128 0x3b
+ 895 00a7 0B       		.uleb128 0xb
+ 896 00a8 49       		.uleb128 0x49
+ 897 00a9 13       		.uleb128 0x13
+ 898 00aa 3F       		.uleb128 0x3f
+ 899 00ab 19       		.uleb128 0x19
+ 900 00ac 3C       		.uleb128 0x3c
+ 901 00ad 19       		.uleb128 0x19
+ 902 00ae 00       		.byte	0
+ 903 00af 00       		.byte	0
+ 904 00b0 0F       		.uleb128 0xf
+ 905 00b1 04       		.uleb128 0x4
+ 906 00b2 01       		.byte	0x1
+ 907 00b3 0B       		.uleb128 0xb
+ 908 00b4 0B       		.uleb128 0xb
+ 909 00b5 49       		.uleb128 0x49
+ 910 00b6 13       		.uleb128 0x13
+ 911 00b7 3A       		.uleb128 0x3a
+ 912 00b8 0B       		.uleb128 0xb
+ 913 00b9 3B       		.uleb128 0x3b
+ 914 00ba 0B       		.uleb128 0xb
+ 915 00bb 01       		.uleb128 0x1
+ 916 00bc 13       		.uleb128 0x13
+ 917 00bd 00       		.byte	0
+ 918 00be 00       		.byte	0
+ 919 00bf 10       		.uleb128 0x10
+ 920 00c0 28       		.uleb128 0x28
+ 921 00c1 00       		.byte	0
+ 922 00c2 03       		.uleb128 0x3
+ 923 00c3 0E       		.uleb128 0xe
+ 924 00c4 1C       		.uleb128 0x1c
+ 925 00c5 0B       		.uleb128 0xb
+ 926 00c6 00       		.byte	0
+ 927 00c7 00       		.byte	0
+ 928 00c8 11       		.uleb128 0x11
+ 929 00c9 28       		.uleb128 0x28
+ 930 00ca 00       		.byte	0
+ 931 00cb 03       		.uleb128 0x3
+ 932 00cc 08       		.uleb128 0x8
+ 933 00cd 1C       		.uleb128 0x1c
+ 934 00ce 0B       		.uleb128 0xb
+ 935 00cf 00       		.byte	0
+ 936 00d0 00       		.byte	0
+ 937 00d1 12       		.uleb128 0x12
+ 938 00d2 34       		.uleb128 0x34
+ 939 00d3 00       		.byte	0
+ARM GAS  /tmp/cccYustO.s 			page 24
+
+
+ 940 00d4 47       		.uleb128 0x47
+ 941 00d5 13       		.uleb128 0x13
+ 942 00d6 3A       		.uleb128 0x3a
+ 943 00d7 0B       		.uleb128 0xb
+ 944 00d8 3B       		.uleb128 0x3b
+ 945 00d9 0B       		.uleb128 0xb
+ 946 00da 02       		.uleb128 0x2
+ 947 00db 18       		.uleb128 0x18
+ 948 00dc 00       		.byte	0
+ 949 00dd 00       		.byte	0
+ 950 00de 13       		.uleb128 0x13
+ 951 00df 34       		.uleb128 0x34
+ 952 00e0 00       		.byte	0
+ 953 00e1 03       		.uleb128 0x3
+ 954 00e2 0E       		.uleb128 0xe
+ 955 00e3 3A       		.uleb128 0x3a
+ 956 00e4 0B       		.uleb128 0xb
+ 957 00e5 3B       		.uleb128 0x3b
+ 958 00e6 0B       		.uleb128 0xb
+ 959 00e7 49       		.uleb128 0x49
+ 960 00e8 13       		.uleb128 0x13
+ 961 00e9 3F       		.uleb128 0x3f
+ 962 00ea 19       		.uleb128 0x19
+ 963 00eb 02       		.uleb128 0x2
+ 964 00ec 18       		.uleb128 0x18
+ 965 00ed 00       		.byte	0
+ 966 00ee 00       		.byte	0
+ 967 00ef 14       		.uleb128 0x14
+ 968 00f0 2E       		.uleb128 0x2e
+ 969 00f1 01       		.byte	0x1
+ 970 00f2 3F       		.uleb128 0x3f
+ 971 00f3 19       		.uleb128 0x19
+ 972 00f4 03       		.uleb128 0x3
+ 973 00f5 0E       		.uleb128 0xe
+ 974 00f6 3A       		.uleb128 0x3a
+ 975 00f7 0B       		.uleb128 0xb
+ 976 00f8 3B       		.uleb128 0x3b
+ 977 00f9 05       		.uleb128 0x5
+ 978 00fa 27       		.uleb128 0x27
+ 979 00fb 19       		.uleb128 0x19
+ 980 00fc 11       		.uleb128 0x11
+ 981 00fd 01       		.uleb128 0x1
+ 982 00fe 12       		.uleb128 0x12
+ 983 00ff 06       		.uleb128 0x6
+ 984 0100 40       		.uleb128 0x40
+ 985 0101 18       		.uleb128 0x18
+ 986 0102 9742     		.uleb128 0x2117
+ 987 0104 19       		.uleb128 0x19
+ 988 0105 01       		.uleb128 0x1
+ 989 0106 13       		.uleb128 0x13
+ 990 0107 00       		.byte	0
+ 991 0108 00       		.byte	0
+ 992 0109 15       		.uleb128 0x15
+ 993 010a 34       		.uleb128 0x34
+ 994 010b 00       		.byte	0
+ 995 010c 03       		.uleb128 0x3
+ 996 010d 08       		.uleb128 0x8
+ARM GAS  /tmp/cccYustO.s 			page 25
+
+
+ 997 010e 3A       		.uleb128 0x3a
+ 998 010f 0B       		.uleb128 0xb
+ 999 0110 3B       		.uleb128 0x3b
+ 1000 0111 05       		.uleb128 0x5
+ 1001 0112 49       		.uleb128 0x49
+ 1002 0113 13       		.uleb128 0x13
+ 1003 0114 02       		.uleb128 0x2
+ 1004 0115 18       		.uleb128 0x18
+ 1005 0116 00       		.byte	0
+ 1006 0117 00       		.byte	0
+ 1007 0118 16       		.uleb128 0x16
+ 1008 0119 34       		.uleb128 0x34
+ 1009 011a 00       		.byte	0
+ 1010 011b 03       		.uleb128 0x3
+ 1011 011c 0E       		.uleb128 0xe
+ 1012 011d 3A       		.uleb128 0x3a
+ 1013 011e 0B       		.uleb128 0xb
+ 1014 011f 3B       		.uleb128 0x3b
+ 1015 0120 05       		.uleb128 0x5
+ 1016 0121 49       		.uleb128 0x49
+ 1017 0122 13       		.uleb128 0x13
+ 1018 0123 02       		.uleb128 0x2
+ 1019 0124 18       		.uleb128 0x18
+ 1020 0125 00       		.byte	0
+ 1021 0126 00       		.byte	0
+ 1022 0127 17       		.uleb128 0x17
+ 1023 0128 2E       		.uleb128 0x2e
+ 1024 0129 00       		.byte	0
+ 1025 012a 3F       		.uleb128 0x3f
+ 1026 012b 19       		.uleb128 0x19
+ 1027 012c 03       		.uleb128 0x3
+ 1028 012d 0E       		.uleb128 0xe
+ 1029 012e 3A       		.uleb128 0x3a
+ 1030 012f 0B       		.uleb128 0xb
+ 1031 0130 3B       		.uleb128 0x3b
+ 1032 0131 0B       		.uleb128 0xb
+ 1033 0132 27       		.uleb128 0x27
+ 1034 0133 19       		.uleb128 0x19
+ 1035 0134 11       		.uleb128 0x11
+ 1036 0135 01       		.uleb128 0x1
+ 1037 0136 12       		.uleb128 0x12
+ 1038 0137 06       		.uleb128 0x6
+ 1039 0138 40       		.uleb128 0x40
+ 1040 0139 18       		.uleb128 0x18
+ 1041 013a 9742     		.uleb128 0x2117
+ 1042 013c 19       		.uleb128 0x19
+ 1043 013d 00       		.byte	0
+ 1044 013e 00       		.byte	0
+ 1045 013f 00       		.byte	0
+ 1046              		.section	.debug_aranges,"",%progbits
+ 1047 0000 1C000000 		.4byte	0x1c
+ 1048 0004 0200     		.2byte	0x2
+ 1049 0006 00000000 		.4byte	.Ldebug_info0
+ 1050 000a 04       		.byte	0x4
+ 1051 000b 00       		.byte	0
+ 1052 000c 0000     		.2byte	0
+ 1053 000e 0000     		.2byte	0
+ARM GAS  /tmp/cccYustO.s 			page 26
+
+
+ 1054 0010 00000000 		.4byte	.Ltext0
+ 1055 0014 40010000 		.4byte	.Letext0-.Ltext0
+ 1056 0018 00000000 		.4byte	0
+ 1057 001c 00000000 		.4byte	0
+ 1058              		.section	.debug_line,"",%progbits
+ 1059              	.Ldebug_line0:
+ 1060 0000 1C010000 		.section	.debug_str,"MS",%progbits,1
+ 1060      0200D400 
+ 1060      00000201 
+ 1060      FB0E0D00 
+ 1060      01010101 
+ 1061              	.LASF44:
+ 1062 0000 706C6C6D 		.ascii	"pllmull\000"
+ 1062      756C6C00 
+ 1063              	.LASF40:
+ 1064 0008 42444352 		.ascii	"BDCR\000"
+ 1064      00
+ 1065              	.LASF34:
+ 1066 000d 43464752 		.ascii	"CFGR\000"
+ 1066      00
+ 1067              	.LASF37:
+ 1068 0012 41484245 		.ascii	"AHBENR\000"
+ 1068      4E5200
+ 1069              	.LASF27:
+ 1070 0019 4D4D4652 		.ascii	"MMFR\000"
+ 1070      00
+ 1071              	.LASF20:
+ 1072 001e 53484353 		.ascii	"SHCSR\000"
+ 1072      5200
+ 1073              	.LASF4:
+ 1074 0024 5F5F7569 		.ascii	"__uint8_t\000"
+ 1074      6E74385F 
+ 1074      7400
+ 1075              	.LASF5:
+ 1076 002e 5F5F696E 		.ascii	"__int32_t\000"
+ 1076      7433325F 
+ 1076      7400
+ 1077              	.LASF50:
+ 1078 0038 53797374 		.ascii	"SystemInit\000"
+ 1078      656D496E 
+ 1078      697400
+ 1079              	.LASF3:
+ 1080 0043 73686F72 		.ascii	"short unsigned int\000"
+ 1080      7420756E 
+ 1080      7369676E 
+ 1080      65642069 
+ 1080      6E7400
+ 1081              	.LASF12:
+ 1082 0056 75696E74 		.ascii	"uint8_t\000"
+ 1082      385F7400 
+ 1083              	.LASF29:
+ 1084 005e 52455345 		.ascii	"RESERVED0\000"
+ 1084      52564544 
+ 1084      3000
+ 1085              	.LASF38:
+ 1086 0068 41504232 		.ascii	"APB2ENR\000"
+ 1086      454E5200 
+ARM GAS  /tmp/cccYustO.s 			page 27
+
+
+ 1087              	.LASF1:
+ 1088 0070 756E7369 		.ascii	"unsigned char\000"
+ 1088      676E6564 
+ 1088      20636861 
+ 1088      7200
+ 1089              	.LASF43:
+ 1090 007e 41484250 		.ascii	"AHBPrescTable\000"
+ 1090      72657363 
+ 1090      5461626C 
+ 1090      6500
+ 1091              	.LASF7:
+ 1092 008c 5F5F7569 		.ascii	"__uint32_t\000"
+ 1092      6E743332 
+ 1092      5F7400
+ 1093              	.LASF8:
+ 1094 0097 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1094      20756E73 
+ 1094      69676E65 
+ 1094      6420696E 
+ 1094      7400
+ 1095              	.LASF21:
+ 1096 00a9 43465352 		.ascii	"CFSR\000"
+ 1096      00
+ 1097              	.LASF32:
+ 1098 00ae 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1098      52784275 
+ 1098      66666572 
+ 1098      00
+ 1099              	.LASF18:
+ 1100 00bb 56544F52 		.ascii	"VTOR\000"
+ 1100      00
+ 1101              	.LASF22:
+ 1102 00c0 48465352 		.ascii	"HFSR\000"
+ 1102      00
+ 1103              	.LASF17:
+ 1104 00c5 49435352 		.ascii	"ICSR\000"
+ 1104      00
+ 1105              	.LASF48:
+ 1106 00ca 2F686F6D 		.ascii	"/home/sls/workspace/stm32f103c8-blink\000"
+ 1106      652F736C 
+ 1106      732F776F 
+ 1106      726B7370 
+ 1106      6163652F 
+ 1107              	.LASF36:
+ 1108 00f0 41504231 		.ascii	"APB1RSTR\000"
+ 1108      52535452 
+ 1108      00
+ 1109              	.LASF2:
+ 1110 00f9 73686F72 		.ascii	"short int\000"
+ 1110      7420696E 
+ 1110      7400
+ 1111              	.LASF39:
+ 1112 0103 41504231 		.ascii	"APB1ENR\000"
+ 1112      454E5200 
+ 1113              	.LASF35:
+ 1114 010b 41504232 		.ascii	"APB2RSTR\000"
+ 1114      52535452 
+ARM GAS  /tmp/cccYustO.s 			page 28
+
+
+ 1114      00
+ 1115              	.LASF31:
+ 1116 0114 5343425F 		.ascii	"SCB_Type\000"
+ 1116      54797065 
+ 1116      00
+ 1117              	.LASF11:
+ 1118 011d 756E7369 		.ascii	"unsigned int\000"
+ 1118      676E6564 
+ 1118      20696E74 
+ 1118      00
+ 1119              	.LASF45:
+ 1120 012a 706C6C73 		.ascii	"pllsource\000"
+ 1120      6F757263 
+ 1120      6500
+ 1121              	.LASF23:
+ 1122 0134 44465352 		.ascii	"DFSR\000"
+ 1122      00
+ 1123              	.LASF10:
+ 1124 0139 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1124      206C6F6E 
+ 1124      6720756E 
+ 1124      7369676E 
+ 1124      65642069 
+ 1125              	.LASF46:
+ 1126 0150 474E5520 		.ascii	"GNU C99 6.3.1 20170620 -mthumb -mcpu=cortex-m3 -g -"
+ 1126      43393920 
+ 1126      362E332E 
+ 1126      31203230 
+ 1126      31373036 
+ 1127 0183 7374643D 		.ascii	"std=c99 -fno-common\000"
+ 1127      63393920 
+ 1127      2D666E6F 
+ 1127      2D636F6D 
+ 1127      6D6F6E00 
+ 1128              	.LASF47:
+ 1129 0197 7372632F 		.ascii	"src/system_stm32f1xx.c\000"
+ 1129      73797374 
+ 1129      656D5F73 
+ 1129      746D3332 
+ 1129      66317878 
+ 1130              	.LASF19:
+ 1131 01ae 41495243 		.ascii	"AIRCR\000"
+ 1131      5200
+ 1132              	.LASF28:
+ 1133 01b4 49534152 		.ascii	"ISAR\000"
+ 1133      00
+ 1134              	.LASF25:
+ 1135 01b9 42464152 		.ascii	"BFAR\000"
+ 1135      00
+ 1136              	.LASF13:
+ 1137 01be 696E7433 		.ascii	"int32_t\000"
+ 1137      325F7400 
+ 1138              	.LASF15:
+ 1139 01c6 73697A65 		.ascii	"sizetype\000"
+ 1139      74797065 
+ 1139      00
+ 1140              	.LASF9:
+ARM GAS  /tmp/cccYustO.s 			page 29
+
+
+ 1141 01cf 6C6F6E67 		.ascii	"long long int\000"
+ 1141      206C6F6E 
+ 1141      6720696E 
+ 1141      7400
+ 1142              	.LASF16:
+ 1143 01dd 43505549 		.ascii	"CPUID\000"
+ 1143      4400
+ 1144              	.LASF30:
+ 1145 01e3 43504143 		.ascii	"CPACR\000"
+ 1145      5200
+ 1146              	.LASF33:
+ 1147 01e9 53797374 		.ascii	"SystemCoreClock\000"
+ 1147      656D436F 
+ 1147      7265436C 
+ 1147      6F636B00 
+ 1148              	.LASF49:
+ 1149 01f9 53797374 		.ascii	"SystemCoreClockUpdate\000"
+ 1149      656D436F 
+ 1149      7265436C 
+ 1149      6F636B55 
+ 1149      70646174 
+ 1150              	.LASF24:
+ 1151 020f 4D4D4641 		.ascii	"MMFAR\000"
+ 1151      5200
+ 1152              	.LASF41:
+ 1153 0215 5243435F 		.ascii	"RCC_TypeDef\000"
+ 1153      54797065 
+ 1153      44656600 
+ 1154              	.LASF14:
+ 1155 0221 75696E74 		.ascii	"uint32_t\000"
+ 1155      33325F74 
+ 1155      00
+ 1156              	.LASF6:
+ 1157 022a 6C6F6E67 		.ascii	"long int\000"
+ 1157      20696E74 
+ 1157      00
+ 1158              	.LASF0:
+ 1159 0233 7369676E 		.ascii	"signed char\000"
+ 1159      65642063 
+ 1159      68617200 
+ 1160              	.LASF26:
+ 1161 023f 41465352 		.ascii	"AFSR\000"
+ 1161      00
+ 1162              	.LASF42:
+ 1163 0244 52455345 		.ascii	"RESET\000"
+ 1163      5400
+ 1164              		.ident	"GCC: (15:6.3.1+svn253039-1build1) 6.3.1 20170620"
+ARM GAS  /tmp/cccYustO.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 system_stm32f1xx.c
+     /tmp/cccYustO.s:20     .data:0000000000000000 SystemCoreClock
+     /tmp/cccYustO.s:17     .data:0000000000000000 $d
+     /tmp/cccYustO.s:27     .rodata:0000000000000000 AHBPrescTable
+     /tmp/cccYustO.s:24     .rodata:0000000000000000 $d
+     /tmp/cccYustO.s:45     .text:0000000000000000 $t
+     /tmp/cccYustO.s:52     .text:0000000000000000 SystemInit
+     /tmp/cccYustO.s:117    .text:000000000000005c $d
+     /tmp/cccYustO.s:123    .text:0000000000000068 $t
+     /tmp/cccYustO.s:130    .text:0000000000000068 SystemCoreClockUpdate
+     /tmp/cccYustO.s:266    .text:000000000000012c $d
+                     .debug_frame:0000000000000010 $d
+
+NO UNDEFINED SYMBOLS

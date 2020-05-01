@@ -4,16 +4,21 @@ This code is intended to be a template to use FreeRTOS with the BluePill dev boa
 It is just a blink LED code running from a task.
 
 
-### Dependencies
+## Dependencies
 
+### Linux
 - arm-none-eabi-gcc (toolchain)
 - [st-flasher](https://github.com/stlink-org/stlink) (If you're gonna flash it using ST-LINK)
 - libusb-1.0-0-dev
 - build-essential
 - cmake
 
+### Windows
+- arm-none-eabi-gcc (toolchain)
+- ST32 ST-Link Utility (or st-flasher compiled for Windows. That's on you, of course)
 
-### Compiling st-flasher from source
+
+## Compiling st-flasher from source
 ```
 git clone https://github.com/texane/stlink stlink.git
 cd stlink
@@ -23,6 +28,6 @@ sudo cp etc/udev/rules.d/49-stlinkv* /etc/udev/rules.d/
 sudo udevadm control --reload
 ```
 
-### Instructions
+## Instructions
 
 If you are done with the dependencies, just run `make` to compile binary and then `make flash` to burn binary to the target device.

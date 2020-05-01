@@ -8,7 +8,7 @@ It is just a blink LED code running from a task.
 
 ### Linux
 - arm-none-eabi-gcc (toolchain)
-- [st-flasher](https://github.com/stlink-org/stlink) (If you're gonna flash it using ST-LINK)
+- [st-flasher](https://github.com/texane/stlink) (If you're gonna flash it using ST-LINK)
 - libusb-1.0-0-dev
 - build-essential
 - cmake

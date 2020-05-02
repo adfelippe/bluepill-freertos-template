@@ -8,28 +8,32 @@ PROJECT = blink
 
 # Project Structure
 SRCDIR = src
-COMDIR = common
 BINDIR = bin
 OBJDIR = obj
 INCDIR = include
 FREERTOS = FreeRTOS/Source
 PORTABLE = $(FREERTOS)/portable/GCC/ARM_CM3
 MEMMANG  = $(FREERTOS)/portable/MemMang
+HAL_DRV	 = STM32F1xx_HAL_Driver/Src
 
 # Project target
 CPU = cortex-m3
 
 # Sources
-SRC = 	$(wildcard $(SRCDIR)/*.c) $(wildcard $(COMDIR)/*.c) $(wildcard $(FREERTOS)/*.c)
+SRC = 	$(wildcard $(SRCDIR)/*.c) 	$(wildcard $(FREERTOS)/*.c)
 SRC +=	$(wildcard $(PORTABLE)/*.c) $(wildcard $(MEMMANG)/*.c)
-ASM = 	$(wildcard $(SRCDIR)/*.s) $(wildcard $(COMDIR)/*.s) $(wildcard $(FREERTOS)/*.s)
+SRC +=	$(wildcard $(HAL_DRV)/*.c)
+ASM = 	$(wildcard $(SRCDIR)/*.s) 	$(wildcard $(FREERTOS)/*.s)
 ASM +=  $(wildcard $(PORTABLE)/*.s) $(wildcard $(MEMMANG)/*.s)
+ASM +=	$(wildcard $(HAL_DRV)/*.s) 	$(wildcard $(HAL_LEG)/*.s)
 
 # Include directories
-INCLUDE  = 	-I$(INCDIR) 			\
-		-Icmsis 					\
-		-IFreeRTOS/Source/include 	\
-		-IFreeRTOS/Source/portable/GCC/ARM_CM3
+INCLUDE  = 	-I$(INCDIR) 								\
+			-Icmsis 									\
+			-IFreeRTOS/Source/include 					\
+			-ISTM32F1xx_HAL_Driver/Inc					\
+			-ISTM32F1xx_HAL_Driver/Inc/Legacy 			\
+			-IFreeRTOS/Source/portable/GCC/ARM_CM3
 
 # Linker
 LSCRIPT = STM32F103X8_FLASH.ld
@@ -131,10 +135,10 @@ $(OBJDIR)/%.o: $(MEMMANG)/%.s
 	@mkdir -p $(dir $@)
 	$(AS) $(ASFLAGS) -o $@ $<
 
-$(OBJDIR)/%.o: $(COMDIR)/%.c
+$(OBJDIR)/%.o: $(HAL_DRV)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(GCFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(COMDIR)/%.s
+$(OBJDIR)/%.o: $(HAL_DRV)/%.s
 	@mkdir -p $(dir $@)
 	$(AS) $(ASFLAGS) -o $@ $<

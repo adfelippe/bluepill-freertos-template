@@ -49,12 +49,13 @@ void LCD_init(void)
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_AFIO_CLK_ENABLE();
+	__HAL_AFIO_REMAP_SWJ_NOJTAG();
 
 	//Configura individualmente as propriedades das sa�das
 	//RS - PA0
 	GPIO_InitStructure.Pin = RS_PIN;
 	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
 	HAL_GPIO_Init(RS_PORT, &GPIO_InitStructure);
 
 	//EN - PA1
@@ -80,7 +81,6 @@ void LCD_init(void)
 	//� preciso desabilitar fun��es principais de grava��o que "tomam" determinados pinos do microcontrolador,
     //para usar esses pinos como portas de entrada e sa�da ou outras fun��es, observe na defini��o de pinos do datasheet
 	//GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-
 	HAL_GPIO_WritePin(RS_PORT, RS_PIN, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(EN_PORT, EN_PIN, GPIO_PIN_RESET);
 

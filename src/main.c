@@ -46,7 +46,6 @@ int main(void)
  	/* Configure the system clock */
  	SystemClock_Config();
  	/* Initialize all configured peripherals */
- 	MX_GPIO_Init();
  	//init_leds();
 	USART2_Init();
     LCD_init();
@@ -85,10 +84,10 @@ void lcdTask(void *pvParams)
                 ++pos;
             else
                 --last_char;
-
             // Stop to show message on LCD
             if (pos == 5)
                 vTaskDelay(pdMS_TO_TICKS(3000));
+
             vTaskDelay(pdMS_TO_TICKS(scroll_delay));
         }
         // Reset values

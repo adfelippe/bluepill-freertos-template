@@ -19,22 +19,19 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <string.h>
 #include "main.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "leds.h"
+#include "serial.h"
+#include "lcd_1602.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
 void ledBlink(void *pvParams);
-
-void delay(void)
-{
-	int i = 2500000;
-	while (i-- > 0)
-	__asm("nop");
-}
+void helloTask(void *pvParams);
+void lcdTask(void *pvParams);
 
 /**
   * @brief  The application entry point.
@@ -42,25 +39,72 @@ void delay(void)
   */
 int main(void)
 {
-  /* MCU Configuration--------------------------------------------------------*/
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+ 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 	HAL_Init();
+ 	/* Configure the system clock */
+ 	SystemClock_Config();
+ 	/* Initialize all configured peripherals */
+ 	MX_GPIO_Init();
+ 	//init_leds();
+	USART2_Init();
+    LCD_init();
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Create RTOS Tasks */
+ 	//xTaskCreate(ledBlink, "LEDBlink", 250, NULL, 3, NULL);
+	//xTaskCreate(helloTask, "helloTask", 500, NULL, 2, NULL);
+    xTaskCreate(lcdTask, "lcdTask", 800, NULL, 2, NULL);
+	/* Start FreeRTOS Scheduler */
+ 	vTaskStartScheduler();
+ 	/* Infinite loop */
+	/* Code should never reach this point */
+ 	while (1);
+}
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  init_leds();
-  xTaskCreate(ledBlink, "LEDBlink", 1000, NULL, 3, NULL);
-  LED1_On();
-  delay();
-  LED1_Off();
-  vTaskStartScheduler();
+void lcdTask(void *pvParams)
+{
+    char text_top[] = "FreeRTOS";
+    char text_bot[] = "CortexM3";
+    uint8_t last_char = strlen(text_top) - 1;
+    uint8_t pos = 0;
+    const uint32_t scroll_delay = 150;
+    LCD_sendCMD(LCD_ON);
 
-  /* Infinite loop */
-  while (1);
+	while(1)
+    {
+        while (last_char > 0 || pos < 16)
+        {
+            LCD_sendCMD(CLEAR_LCD);
+            LCD_sendCMD(LCD_ON);
+            LCD_gotoxy(pos, 1);
+            LCD_write(&text_top[last_char]);
+            LCD_gotoxy(pos, 2);
+            LCD_write(&text_bot[last_char]);
+            if (last_char <= 0)
+                ++pos;
+            else
+                --last_char;
+
+            // Stop to show message on LCD
+            if (pos == 5)
+                vTaskDelay(pdMS_TO_TICKS(3000));
+            vTaskDelay(pdMS_TO_TICKS(scroll_delay));
+        }
+        // Reset values
+        last_char = strlen(text_top) - 1;
+        pos = 0;
+        vTaskDelay(pdMS_TO_TICKS(scroll_delay));
+	}
+}
+
+void helloTask(void *pvParams)
+{
+	while(1)
+	{
+		transmit_USART2("Hello from task\r\n");
+		vTaskDelay(pdMS_TO_TICKS(2000));
+	}
 }
 
 void ledBlink(void *pvParams)
@@ -116,13 +160,6 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_GPIO_Init(void)
-{
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-}
 
 /* USER CODE BEGIN 4 */
 

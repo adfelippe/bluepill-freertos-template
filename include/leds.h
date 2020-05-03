@@ -4,5 +4,7 @@
 void init_leds(void);
 void LED1_On(void);
 void LED1_Off(void);
+void LED2_On(void);
+void LED2_Off(void);
 
 #endif

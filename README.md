@@ -35,5 +35,4 @@ sudo udevadm control --reload
 ## Instructions
 
 If you are done with the dependencies, just run `make` to compile the binaries.
-
 You must run `make flash_linux` or `make flash_windows` to flash the code to the Bluepill board depending on the OS you're on.

@@ -13,6 +13,9 @@ It is just a blink LED code running from a task.
 - build-essential
 - cmake
 
+If you're running an Ubuntu or Debian-based distro, just run:
+`sudo apt install gcc-arm-none-eabi stlink-tools libusb-1.0-0-dev build-essential cmake`
+
 ### Windows
 - arm-none-eabi-gcc (toolchain)
 - ST32 ST-Link Utility (or st-flasher compiled for Windows. That's on you, of course)

@@ -48,12 +48,12 @@ int main(void)
  	/* Initialize all configured peripherals */
  	//init_leds();
 	USART2_Init();
-    LCD_init();
+	LCD_init();
 
 	/* Create RTOS Tasks */
  	//xTaskCreate(ledBlink, "LEDBlink", 250, NULL, 3, NULL);
 	//xTaskCreate(helloTask, "helloTask", 500, NULL, 2, NULL);
-    xTaskCreate(lcdTask, "lcdTask", 800, NULL, 2, NULL);
+	xTaskCreate(lcdTask, "lcdTask", 800, NULL, 2, NULL);
 	/* Start FreeRTOS Scheduler */
  	vTaskStartScheduler();
  	/* Infinite loop */

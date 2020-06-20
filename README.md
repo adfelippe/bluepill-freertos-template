@@ -13,6 +13,10 @@ It is just a blink LED code running from a task.
 - build-essential
 - cmake
 
+If you're running an Ubuntu or Debian-based distro, just run:
+
+`sudo apt install gcc-arm-none-eabi stlink-tools libusb-1.0-0-dev build-essential cmake`
+
 ### Windows
 - arm-none-eabi-gcc (toolchain)
 - ST32 ST-Link Utility (or st-flasher compiled for Windows. That's on you, of course)
@@ -30,4 +34,5 @@ sudo udevadm control --reload
 
 ## Instructions
 
-If you are done with the dependencies, just run `make` to compile binary and then `make flash` to burn binary to the target device.
+If you are done with the dependencies, just run `make` to compile the binaries.
+You must run `make flash_linux` or `make flash_windows` to flash the code to the Bluepill board depending on the OS you're on.

@@ -52,6 +52,7 @@
     - *common_defines
     - TEST
     - STM32F103xB
+
   :test_preprocess:
     - *common_defines
     - TEST
@@ -99,6 +100,14 @@
   :system: []    # for example, you might list 'm' to grab the math library
   :test: []
   :release: []
+
+# Compilation flags
+:flags:
+  :test:
+    :compile:
+      :*:
+        - -Wall
+        - -Wno-int-to-pointer-cast
 
 :plugins:
   :load_paths:
